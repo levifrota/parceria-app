@@ -286,6 +286,11 @@ body {
     font-size: 0.9375rem;
     line-height: 1.5;
     min-height: 2.75rem;
+
+    &::placeholder {
+      color: $text-muted;
+      opacity: 1;
+    }
   }
 
   &__label {

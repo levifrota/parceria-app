@@ -3,7 +3,7 @@
     <q-card-section class="row items-center">
       <q-avatar :color="content.color" text-color="white" :icon="content.icon" size="56px" />
 
-      <div class="col q-ml-md">
+      <div class="col q-ml-md title">
         <div class="text-h6">{{ content.title }}</div>
         <div class="text-caption text-grey-7">{{ content.description }}</div>
       </div>
@@ -60,6 +60,10 @@ const openContent = () => {
 </script>
 
 <style scoped>
+.title {
+  margin-right: 2rem;
+}
+
 .content-card {
   cursor: pointer;
   transition:
@@ -76,7 +80,7 @@ const openContent = () => {
 
 .type-badge {
   position: absolute;
-  top: 8px;
+  top: 0;
   right: 8px;
 }
 </style>

@@ -9,6 +9,13 @@ const routes = [
       { path: 'contractions', component: () => import('pages/ContractionsPage.vue') },
       { path: 'content/:id', component: () => import('pages/ContentDetailPage.vue') },
       { path: 'profile', component: () => import('pages/ProfilePage.vue') },
+
+      // Rota temporária de admin
+      {
+        path: 'admin/contents',
+        component: () => import('pages/CreateContent.vue'),
+        meta: { requiresAuth: false }, // Remover em produção
+      },
     ],
   },
   {

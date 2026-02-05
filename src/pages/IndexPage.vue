@@ -1,5 +1,15 @@
 <template>
   <q-page padding>
+    <!-- Adicionar no topo da página, temporário -->
+    <q-btn
+      flat
+      dense
+      icon="admin_panel_settings"
+      color="grey"
+      size="sm"
+      @click="$router.push('/admin/contents')"
+      class="absolute-top-right q-ma-sm"
+    />
     <div class="page-header q-mb-lg">
       <h1 class="text-h4 text-weight-bold text-primary">
         {{ greeting }}
