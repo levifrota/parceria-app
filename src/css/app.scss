@@ -1,0 +1,1285 @@
+@use 'sass:color';
+@import './quasar.variables.scss';
+
+// Global shadcn-vue inspired styles for Quasar components
+
+// ============================================
+// SAFE AREA SUPPORT (Mobile Notch/Navigation)
+// ============================================
+:root {
+  --sat: env(safe-area-inset-top);
+  --sar: env(safe-area-inset-right);
+  --sab: env(safe-area-inset-bottom);
+  --sal: env(safe-area-inset-left);
+}
+
+html,
+body {
+  padding: 0;
+  margin: 0;
+}
+
+// ============================================
+// BASE STYLES (shadcn-vue)
+// ============================================
+* {
+  border-color: $border;
+}
+
+body {
+  font-family:
+    -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen', 'Ubuntu', 'Cantarell',
+    'Fira Sans', 'Droid Sans', 'Helvetica Neue', sans-serif;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  color: $text-primary;
+  background-color: $background;
+  font-size: 14px;
+  line-height: 1.5;
+}
+
+// Layout safe area adjustments
+.q-layout {
+  // Não adicionar padding no layout principal
+}
+
+// Header safe area - fica fixo no topo respeitando safe area
+.q-header {
+  padding-top: env(safe-area-inset-top);
+
+  .q-toolbar {
+    min-height: 50px;
+  }
+}
+
+// Footer safe area - fica fixo no bottom respeitando safe area
+.q-footer {
+  padding-bottom: env(safe-area-inset-bottom);
+}
+
+// Drawer safe areas
+.q-drawer {
+  top: 0;
+  padding-top: env(safe-area-inset-top);
+  padding-bottom: env(safe-area-inset-bottom);
+
+  &--left {
+    padding-left: env(safe-area-inset-left);
+  }
+
+  &--right {
+    padding-right: env(safe-area-inset-right);
+  }
+}
+
+// Page container - conteúdo das páginas
+.q-page-container {
+  // O topo já é respeitado pelo header
+  padding-left: env(safe-area-inset-left);
+  padding-right: env(safe-area-inset-right);
+  padding-bottom: env(safe-area-inset-bottom);
+}
+
+// Pages devem respeitar o padding do container
+.q-page {
+  // Adicionar padding interno para conteúdo não grudar nas bordas
+  padding-left: max(1rem, env(safe-area-inset-left));
+  padding-right: max(1rem, env(safe-area-inset-right));
+  padding-bottom: env(safe-area-inset-bottom);
+}
+
+// Dialog safe area
+.q-dialog__inner {
+  padding-top: max(1rem, env(safe-area-inset-top));
+  padding-bottom: max(1rem, env(safe-area-inset-bottom));
+  padding-left: max(1rem, env(safe-area-inset-left));
+  padding-right: max(1rem, env(safe-area-inset-right));
+}
+
+// ============================================
+// BUTTON (shadcn-vue style) - Mobile Optimized
+// ============================================
+.q-btn {
+  font-weight: 500;
+  text-transform: none;
+  letter-spacing: normal;
+  border-radius: $button-border-radius;
+  transition: all 0.15s cubic-bezier(0.4, 0, 0.2, 1);
+  padding: 0.625rem 1rem;
+  font-size: 0.9375rem;
+  line-height: 1.25rem;
+  min-height: 2.75rem;
+
+  // Default (solid) variant
+  &:not(.q-btn--outline):not(.q-btn--flat):not(.q-btn--unelevated) {
+    box-shadow: 0 1px 2px 0 rgba(0, 0, 0, 0.05);
+
+    &:hover {
+      box-shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.1);
+      filter: brightness(0.95);
+    }
+
+    &:active {
+      box-shadow: none;
+      transform: scale(0.98);
+    }
+  }
+
+  // Outline variant
+  &.q-btn--outline {
+    border: 1px solid $border;
+    background-color: transparent;
+    box-shadow: none;
+
+    &:hover {
+      background-color: $surface;
+      border-color: color.scale($border, $lightness: -10%);
+    }
+
+    &:active {
+      background-color: color.scale($surface, $lightness: -5%);
+      transform: scale(0.98);
+    }
+  }
+
+  // Ghost/Flat variant
+  &.q-btn--flat {
+    box-shadow: none;
+    background-color: transparent;
+
+    &:hover {
+      background-color: $surface;
+    }
+
+    &:active {
+      background-color: color.scale($surface, $lightness: -5%);
+      transform: scale(0.98);
+    }
+  }
+
+  // Unelevated variant
+  &.q-btn--unelevated {
+    box-shadow: none;
+
+    &:hover {
+      filter: brightness(0.95);
+    }
+
+    &:active {
+      transform: scale(0.98);
+    }
+  }
+
+  // Size variants (mobile optimized)
+  &.q-btn--dense {
+    padding: 0.375rem 0.875rem;
+    font-size: 0.875rem;
+    min-height: 2.25rem;
+  }
+
+  &.q-btn--lg {
+    padding: 0.75rem 1.5rem;
+    font-size: 1rem;
+    min-height: 3rem;
+  }
+
+  // Icon only - mobile touch target
+  &.q-btn--round {
+    padding: 0.625rem;
+    min-width: 2.75rem;
+    min-height: 2.75rem;
+
+    &.q-btn--dense {
+      padding: 0.5rem;
+      min-width: 2.25rem;
+      min-height: 2.25rem;
+    }
+  }
+
+  // Disabled state
+  &.disabled {
+    opacity: 0.5;
+    pointer-events: none;
+  }
+
+  // Icon spacing fix
+  .q-icon {
+    font-size: 1.25rem;
+  }
+
+  .q-btn__content {
+    gap: 0.5rem;
+  }
+}
+
+// ============================================
+// CARD (shadcn-vue style) - Mobile Optimized
+// ============================================
+.q-card {
+  border-radius: $card-border-radius;
+  border: 1px solid $border;
+  background-color: $background;
+  box-shadow: 0 1px 2px 0 rgba(0, 0, 0, 0.05);
+  transition: all 0.15s cubic-bezier(0.4, 0, 0.2, 1);
+
+  &__section {
+    padding: 1rem;
+
+    &--vert {
+      padding: 0.75rem 1rem;
+    }
+  }
+
+  &__actions {
+    padding: 0.75rem 1rem;
+    border-top: 1px solid $border;
+    gap: 0.5rem;
+
+    // Fix alignment on mobile
+    &--horiz {
+      > .q-btn {
+        flex: 1;
+        min-width: 0;
+      }
+    }
+  }
+}
+
+// ============================================
+// INPUT & FIELD (shadcn-vue style) - Mobile Fixed
+// ============================================
+.q-field {
+  margin-bottom: 1rem;
+
+  &__control {
+    border-radius: $button-border-radius;
+    border: 1px solid $border;
+    background-color: $background;
+    min-height: 2.75rem;
+    height: auto;
+    padding: 0;
+    transition: all 0.15s cubic-bezier(0.4, 0, 0.2, 1);
+    box-shadow: 0 1px 2px 0 rgba(0, 0, 0, 0.05);
+
+    &::before {
+      display: none;
+    }
+
+    &::after {
+      display: none;
+    }
+
+    &:hover {
+      border-color: color.scale($border, $lightness: -20%);
+    }
+  }
+
+  &__control-container {
+    padding-top: 0;
+    padding-bottom: 0;
+  }
+
+  &__native,
+  &__input {
+    color: $text-primary;
+    padding: 0.625rem 0.875rem;
+    font-size: 0.9375rem;
+    line-height: 1.5;
+    min-height: 2.75rem;
+  }
+
+  &__label {
+    color: $text-muted;
+    font-weight: 500;
+    font-size: 0.875rem;
+    padding-left: 0.875rem;
+    padding-right: 0.875rem;
+    top: 50%;
+    transform: translateY(-50%);
+    line-height: 1;
+  }
+
+  // Fix for floating label
+  &--float {
+    .q-field__label {
+      transform: translateY(-140%) scale(0.85);
+      padding-left: 0;
+      padding-right: 0;
+    }
+  }
+
+  &__bottom {
+    padding: 0.375rem 0.875rem 0;
+    min-height: 1.5rem;
+  }
+
+  &__messages {
+    color: $text-muted;
+    font-size: 0.8125rem;
+    line-height: 1.4;
+  }
+
+  &--focused {
+    .q-field__control {
+      border-color: $primary;
+      box-shadow: 0 0 0 3px rgba(127, 34, 254, 0.12);
+    }
+
+    .q-field__label {
+      color: $primary;
+    }
+  }
+
+  &--error {
+    .q-field__control {
+      border-color: $negative;
+    }
+
+    .q-field__bottom {
+      color: $negative;
+    }
+
+    .q-field__messages {
+      color: $negative;
+    }
+  }
+
+  // Outlined style
+  &--outlined {
+    .q-field__control {
+      padding: 0;
+    }
+  }
+
+  // Filled style override to match outlined
+  &--filled {
+    .q-field__control {
+      background-color: $background;
+
+      &::before {
+        display: none;
+      }
+    }
+  }
+
+  // Standard style override
+  &--standard {
+    .q-field__control {
+      border: none;
+      border-bottom: 1px solid $border;
+      border-radius: 0;
+      box-shadow: none;
+      padding: 0 0.25rem;
+    }
+  }
+
+  // Prepend/Append icons fix
+  &__prepend,
+  &__append {
+    padding: 0 0.5rem;
+    height: auto;
+    align-self: center;
+  }
+
+  &__append {
+    padding-right: 0.875rem;
+  }
+
+  &__prepend {
+    padding-left: 0.875rem;
+  }
+}
+
+// Textarea - mobile optimized
+.q-field--auto-height {
+  .q-field__control {
+    height: auto;
+    min-height: 5rem;
+  }
+
+  .q-field__native {
+    resize: vertical;
+    padding: 0.75rem 0.875rem;
+  }
+}
+
+// ============================================
+// SELECT (shadcn-vue style) - Mobile Fixed
+// ============================================
+.q-select {
+  .q-field__native {
+    padding-right: 2.5rem;
+  }
+
+  .q-field__append {
+    padding-right: 0.875rem;
+  }
+}
+
+.q-menu {
+  border-radius: $button-border-radius;
+  border: 1px solid $border;
+  box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1);
+  background-color: $background;
+  padding: 0.375rem;
+  margin-top: 0.25rem;
+  max-height: 60vh;
+
+  .q-virtual-scroll__content {
+    padding: 0;
+  }
+}
+
+.q-item {
+  border-radius: $button-border-radius;
+  padding: 0.75rem 0.875rem;
+  margin: 0.125rem 0;
+  min-height: 2.75rem;
+  transition: all 0.15s cubic-bezier(0.4, 0, 0.2, 1);
+  font-size: 0.9375rem;
+  color: $text-primary;
+
+  &:hover {
+    background-color: $surface;
+  }
+
+  &.q-item--active {
+    background-color: rgba(127, 34, 254, 0.1);
+    color: $primary;
+    font-weight: 500;
+  }
+
+  &__section {
+    &--avatar {
+      min-width: 2.5rem;
+      padding-right: 0.75rem;
+    }
+
+    &--side {
+      padding-right: 0.5rem;
+    }
+  }
+
+  &__label {
+    line-height: 1.5;
+  }
+}
+
+// ============================================
+// CHECKBOX (shadcn-vue style) - Mobile Fixed
+// ============================================
+.q-checkbox {
+  padding: 0.5rem 0;
+
+  &__bg {
+    border: 2px solid $border;
+    border-radius: 4px;
+    width: 1.25rem;
+    height: 1.25rem;
+    transition: all 0.15s cubic-bezier(0.4, 0, 0.2, 1);
+  }
+
+  &__svg {
+    width: 1rem;
+    height: 1rem;
+  }
+
+  &__inner {
+    padding: 0.5rem;
+    margin: -0.5rem;
+
+    &--truthy {
+      .q-checkbox__bg {
+        border-color: $primary;
+        background-color: $primary;
+      }
+    }
+
+    &--indet {
+      .q-checkbox__bg {
+        border-color: $primary;
+        background-color: $primary;
+      }
+    }
+  }
+
+  &:active {
+    .q-checkbox__bg {
+      transform: scale(0.95);
+    }
+  }
+
+  &__label {
+    color: $text-primary;
+    font-size: 0.9375rem;
+    padding-left: 0.75rem;
+    line-height: 1.5;
+  }
+}
+
+// ============================================
+// RADIO (shadcn-vue style) - Mobile Fixed
+// ============================================
+.q-radio {
+  padding: 0.5rem 0;
+
+  &__bg {
+    width: 1.25rem;
+    height: 1.25rem;
+  }
+
+  &__outer {
+    border: 2px solid $border;
+    transition: all 0.15s cubic-bezier(0.4, 0, 0.2, 1);
+  }
+
+  &__inner {
+    width: 0.625rem;
+    height: 0.625rem;
+    background-color: transparent;
+    padding: 0.5rem;
+    margin: -0.5rem;
+
+    &--truthy {
+      background-color: transparent;
+      transform: scale(1);
+
+      .q-radio__outer {
+        border-color: $primary;
+      }
+
+      &::before {
+        content: '';
+        position: absolute;
+        width: 0.625rem;
+        height: 0.625rem;
+        border-radius: 50%;
+        background-color: $primary;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+      }
+    }
+  }
+
+  &:active {
+    .q-radio__outer {
+      transform: scale(0.95);
+    }
+  }
+
+  &__label {
+    color: $text-primary;
+    font-size: 0.9375rem;
+    padding-left: 0.75rem;
+    line-height: 1.5;
+  }
+}
+
+// ============================================
+// TOGGLE/SWITCH (shadcn-vue style) - Mobile Optimized
+// ============================================
+.q-toggle {
+  padding: 0.5rem 0;
+
+  &__track {
+    width: 3rem;
+    height: 1.75rem;
+    border-radius: 9999px;
+    background-color: color.scale($border, $lightness: -10%);
+    opacity: 1;
+    transition: all 0.15s cubic-bezier(0.4, 0, 0.2, 1);
+  }
+
+  &__thumb {
+    width: 1.375rem;
+    height: 1.375rem;
+    left: 0.1875rem;
+    box-shadow: 0 2px 4px 0 rgba(0, 0, 0, 0.2);
+    transition: all 0.15s cubic-bezier(0.4, 0, 0.2, 1);
+
+    &::after {
+      box-shadow: none;
+    }
+  }
+
+  &__inner {
+    padding: 0.5rem;
+    margin: -0.5rem;
+
+    &--truthy {
+      .q-toggle__track {
+        background-color: $primary;
+      }
+
+      .q-toggle__thumb {
+        left: calc(100% - 1.5625rem);
+      }
+    }
+  }
+
+  &:active {
+    .q-toggle__thumb {
+      width: 1.625rem;
+    }
+  }
+
+  &__label {
+    color: $text-primary;
+    font-size: 0.9375rem;
+    padding-left: 0.75rem;
+    line-height: 1.5;
+  }
+}
+
+// ============================================
+// BADGE (shadcn-vue style)
+// ============================================
+.q-badge {
+  border-radius: 9999px;
+  font-weight: 500;
+  padding: 0.1875rem 0.625rem;
+  font-size: 0.75rem;
+  line-height: 1rem;
+  border: 1px solid transparent;
+
+  &--outline {
+    background-color: transparent;
+    border-color: currentColor;
+  }
+}
+
+// ============================================
+// CHIP (shadcn-vue style) - Mobile Optimized
+// ============================================
+.q-chip {
+  border-radius: $button-border-radius;
+  font-weight: 500;
+  border: 1px solid $border;
+  background-color: $surface;
+  color: $text-primary;
+  padding: 0.375rem 0.875rem;
+  font-size: 0.875rem;
+  box-shadow: none;
+  min-height: 2rem;
+
+  &__icon {
+    font-size: 1.125rem;
+  }
+
+  &__content {
+    gap: 0.375rem;
+  }
+
+  &--clickable {
+    transition: all 0.15s cubic-bezier(0.4, 0, 0.2, 1);
+
+    &:hover {
+      background-color: color.scale($surface, $lightness: -5%);
+    }
+
+    &:active {
+      transform: scale(0.98);
+    }
+  }
+
+  &--outline {
+    background-color: transparent;
+  }
+}
+
+// ============================================
+// DIALOG (shadcn-vue style) - Mobile Optimized
+// ============================================
+.q-dialog {
+  &__backdrop {
+    background: rgba(0, 0, 0, 0.5);
+    backdrop-filter: blur(2px);
+  }
+
+  &__inner {
+    padding: 1rem;
+
+    > div {
+      border-radius: $card-border-radius;
+      box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1);
+      max-width: calc(100vw - 2rem);
+      width: 100%;
+    }
+  }
+}
+
+// ============================================
+// TABLE (shadcn-vue style) - Mobile Optimized
+// ============================================
+.q-table {
+  border-radius: $card-border-radius;
+  border: 1px solid $border;
+  box-shadow: 0 1px 2px 0 rgba(0, 0, 0, 0.05);
+
+  &__top,
+  &__bottom {
+    background-color: transparent;
+    padding: 0.75rem;
+    border-bottom: 1px solid $border;
+  }
+
+  &__bottom {
+    border-bottom: none;
+    border-top: 1px solid $border;
+  }
+
+  &__container {
+    border: none;
+  }
+
+  thead tr {
+    border-bottom: 1px solid $border;
+  }
+
+  tbody td {
+    border-color: $border;
+  }
+
+  th {
+    font-weight: 600;
+    color: $text-primary;
+    background-color: transparent;
+    font-size: 0.6875rem;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    padding: 0.75rem;
+  }
+
+  td {
+    padding: 0.75rem;
+    font-size: 0.875rem;
+    color: $text-primary;
+  }
+
+  tbody tr {
+    transition: all 0.15s cubic-bezier(0.4, 0, 0.2, 1);
+
+    &:hover {
+      background-color: $surface;
+    }
+  }
+
+  &--dense {
+    th,
+    td {
+      padding: 0.5rem;
+    }
+  }
+}
+
+// ============================================
+// TABS (shadcn-vue style) - Mobile Optimized
+// ============================================
+.q-tabs {
+  &__content {
+    border-bottom: 1px solid $border;
+  }
+}
+
+.q-tab {
+  text-transform: none;
+  font-weight: 500;
+  color: $text-muted;
+  font-size: 0.875rem;
+  padding: 0.625rem 1rem;
+  min-height: 3rem;
+  letter-spacing: normal;
+  transition: all 0.15s cubic-bezier(0.4, 0, 0.2, 1);
+
+  &:hover {
+    color: $text-primary;
+    background-color: $surface;
+  }
+
+  &--active {
+    color: $text-primary;
+    font-weight: 600;
+  }
+
+  &__indicator {
+    height: 2px;
+    background-color: $primary;
+  }
+
+  &__icon {
+    font-size: 1.375rem;
+  }
+
+  &__label {
+    line-height: 1.4;
+  }
+}
+
+// ============================================
+// TOOLTIP (shadcn-vue style)
+// ============================================
+.q-tooltip {
+  border-radius: $button-border-radius;
+  background-color: $dark;
+  color: #ffffff;
+  font-size: 0.8125rem;
+  padding: 0.5rem 0.875rem;
+  box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+  max-width: calc(100vw - 2rem);
+}
+
+// ============================================
+// PROGRESS (shadcn-vue style)
+// ============================================
+.q-linear-progress {
+  border-radius: 9999px;
+  height: 0.5rem;
+
+  &__track {
+    background-color: color.scale($border, $lightness: 30%);
+    opacity: 1;
+  }
+
+  &__model {
+    background-color: $primary;
+  }
+}
+
+.q-circular-progress {
+  &__svg {
+    .q-circular-progress__track {
+      stroke: color.scale($border, $lightness: 30%);
+      opacity: 0.3;
+    }
+  }
+}
+
+// ============================================
+// SEPARATOR (shadcn-vue style)
+// ============================================
+.q-separator {
+  background-color: $border;
+  opacity: 1;
+}
+
+// ============================================
+// LIST (shadcn-vue style) - Mobile Optimized
+// ============================================
+.q-list {
+  border-radius: $card-border-radius;
+  border: 1px solid $border;
+  padding: 0.375rem;
+
+  &--bordered {
+    .q-item {
+      border-bottom: none;
+      margin: 0.125rem 0;
+    }
+  }
+
+  &--separator {
+    > .q-item-type + .q-item-type {
+      border-top: 1px solid $border;
+      margin-top: 0.25rem;
+      padding-top: 0.5rem;
+    }
+  }
+
+  &--dense {
+    .q-item {
+      padding: 0.5rem 0.75rem;
+      min-height: 2.25rem;
+    }
+  }
+}
+
+// ============================================
+// EXPANSION ITEM (shadcn-vue Accordion style)
+// ============================================
+.q-expansion-item {
+  border-radius: $button-border-radius;
+  border: 1px solid $border;
+  margin-bottom: 0.5rem;
+
+  &__container {
+    border-radius: $button-border-radius;
+    overflow: hidden;
+  }
+
+  &__toggle-icon {
+    transition: transform 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+  }
+
+  &--expanded {
+    .q-expansion-item__toggle-icon {
+      transform: rotate(180deg);
+    }
+  }
+
+  .q-item {
+    border: none;
+    padding: 1rem;
+    font-weight: 500;
+    min-height: 3rem;
+
+    &:hover {
+      background-color: $surface;
+    }
+  }
+
+  &__content {
+    padding: 0 1rem 1rem;
+    color: $text-secondary;
+    font-size: 0.875rem;
+  }
+}
+
+// ============================================
+// AVATAR (shadcn-vue style)
+// ============================================
+.q-avatar {
+  border-radius: 9999px;
+  overflow: hidden;
+  background-color: $surface;
+  color: $text-primary;
+  font-weight: 500;
+
+  &__content {
+    font-size: 0.875rem;
+  }
+}
+
+// ============================================
+// BREADCRUMBS (shadcn-vue style)
+// ============================================
+.q-breadcrumbs {
+  font-size: 0.875rem;
+  color: $text-muted;
+
+  &__el {
+    color: $text-muted;
+
+    &:hover {
+      color: $text-primary;
+    }
+  }
+
+  &__el--link {
+    transition: color 0.15s cubic-bezier(0.4, 0, 0.2, 1);
+  }
+
+  &__separator {
+    color: $text-muted;
+    margin: 0 0.25rem;
+  }
+}
+
+// ============================================
+// PAGINATION (shadcn-vue style) - Mobile Optimized
+// ============================================
+.q-pagination {
+  &__content {
+    gap: 0.25rem;
+  }
+
+  .q-btn {
+    min-width: 2.5rem;
+    min-height: 2.5rem;
+    padding: 0.5rem;
+    font-size: 0.875rem;
+    border: 1px solid $border;
+    background-color: $background;
+    color: $text-primary;
+
+    &:hover {
+      background-color: $surface;
+      border-color: color.scale($border, $lightness: -10%);
+    }
+
+    &.q-btn--flat {
+      border: none;
+    }
+  }
+
+  &__middle {
+    .q-btn {
+      &.q-btn--flat {
+        background-color: $primary;
+        color: white;
+        border: 1px solid $primary;
+
+        &:hover {
+          background-color: color.scale($primary, $lightness: -10%);
+        }
+      }
+    }
+  }
+}
+
+// ============================================
+// SLIDER (shadcn-vue style) - Mobile Optimized
+// ============================================
+.q-slider {
+  padding: 1rem 0;
+
+  &__track-container {
+    border-radius: 9999px;
+    height: 0.5rem;
+  }
+
+  &__track {
+    background-color: color.scale($border, $lightness: 30%);
+    border-radius: 9999px;
+  }
+
+  &__track-markers {
+    background-color: $primary;
+    border-radius: 9999px;
+  }
+
+  &__thumb {
+    width: 1.5rem;
+    height: 1.5rem;
+    background-color: $background;
+    border: 2px solid $primary;
+    box-shadow: 0 2px 4px 0 rgba(0, 0, 0, 0.2);
+  }
+
+  &__pin {
+    background-color: $primary;
+    border-radius: $button-border-radius;
+    font-size: 0.75rem;
+    padding: 0.25rem 0.5rem;
+  }
+}
+
+// ============================================
+// RATING (shadcn-vue style) - Mobile Optimized
+// ============================================
+.q-rating {
+  &__icon {
+    font-size: 1.75rem;
+    transition: all 0.15s cubic-bezier(0.4, 0, 0.2, 1);
+
+    &:active {
+      transform: scale(0.95);
+    }
+
+    & + .q-rating__icon {
+      margin-left: 0.375rem;
+    }
+  }
+}
+
+// ============================================
+// STEPPER (shadcn-vue style) - Mobile Optimized
+// ============================================
+.q-stepper {
+  border-radius: $card-border-radius;
+  border: 1px solid $border;
+  box-shadow: 0 1px 2px 0 rgba(0, 0, 0, 0.05);
+
+  &__header {
+    border-bottom: 1px solid $border;
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
+  }
+
+  &__tab {
+    font-size: 0.875rem;
+    color: $text-muted;
+    padding: 1rem 0.75rem;
+    min-width: 0;
+
+    &--active {
+      color: $primary;
+    }
+
+    &--done {
+      color: $positive;
+    }
+  }
+
+  &__dot {
+    width: 2rem;
+    height: 2rem;
+    border: 2px solid $border;
+    background-color: $background;
+    color: $text-muted;
+    font-weight: 600;
+    font-size: 0.875rem;
+
+    &--active {
+      border-color: $primary;
+      background-color: $primary;
+      color: white;
+    }
+
+    &--done {
+      border-color: $positive;
+      background-color: $positive;
+      color: white;
+    }
+  }
+
+  &__content {
+    padding: 1rem;
+  }
+}
+
+// ============================================
+// BANNER (shadcn-vue Alert style) - Mobile Optimized
+// ============================================
+.q-banner {
+  border-radius: $card-border-radius;
+  border: 1px solid $border;
+  background-color: $background;
+  padding: 1rem;
+  font-size: 0.875rem;
+
+  &__avatar {
+    min-width: 1.5rem;
+    padding-right: 0.75rem;
+  }
+
+  &__content {
+    color: $text-primary;
+    line-height: 1.5;
+  }
+
+  &--dense {
+    padding: 0.75rem;
+  }
+}
+
+// ============================================
+// TIMELINE (shadcn-vue style)
+// ============================================
+.q-timeline {
+  &__entry {
+    padding-bottom: 1.5rem;
+  }
+
+  &__dot {
+    width: 0.75rem;
+    height: 0.75rem;
+    border: 2px solid $border;
+    background-color: $background;
+
+    &--icon {
+      width: 2rem;
+      height: 2rem;
+      border-radius: 9999px;
+      background-color: $primary;
+      color: white;
+      font-size: 1rem;
+    }
+  }
+
+  &__content {
+    padding-bottom: 0;
+  }
+
+  &__title {
+    font-weight: 600;
+    color: $text-primary;
+    font-size: 0.9375rem;
+    margin-bottom: 0.25rem;
+  }
+
+  &__subtitle {
+    color: $text-muted;
+    font-size: 0.8125rem;
+    margin-bottom: 0.5rem;
+  }
+}
+
+// ============================================
+// SCROLLBAR (shadcn-vue style)
+// ============================================
+::-webkit-scrollbar {
+  width: 8px;
+  height: 8px;
+}
+
+::-webkit-scrollbar-track {
+  background: $surface;
+  border-radius: 4px;
+}
+
+::-webkit-scrollbar-thumb {
+  background: $border;
+  border-radius: 4px;
+  transition: background 0.15s cubic-bezier(0.4, 0, 0.2, 1);
+
+  &:hover {
+    background: color.scale($border, $lightness: -15%);
+  }
+}
+
+// ============================================
+// UTILITY CLASSES (shadcn-vue inspired)
+// ============================================
+.text-h1,
+.text-h2,
+.text-h3,
+.text-h4,
+.text-h5,
+.text-h6 {
+  font-weight: 600;
+  line-height: 1.2;
+  color: $text-primary;
+}
+
+.text-body1,
+.text-body2 {
+  color: $text-primary;
+  line-height: 1.5;
+}
+
+.text-caption,
+.text-overline {
+  color: $text-muted;
+}
+
+// ============================================
+// MOBILE SPECIFIC FIXES
+// ============================================
+@media (max-width: 600px) {
+  .q-card__section {
+    padding: 0.875rem;
+  }
+
+  .q-dialog__inner > div {
+    margin: 0.5rem;
+  }
+
+  .q-table {
+    font-size: 0.8125rem;
+
+    th,
+    td {
+      padding: 0.5rem;
+    }
+  }
+
+  .q-btn {
+    min-height: 2.75rem;
+  }
+
+  .q-field__control {
+    min-height: 2.75rem;
+  }
+}
+
+// ============================================
+// FIX TOUCH TARGETS (WCAG 2.5.5)
+// ============================================
+.q-btn,
+.q-checkbox__inner,
+.q-radio__inner,
+.q-toggle__inner {
+  min-width: 44px;
+  min-height: 44px;
+}

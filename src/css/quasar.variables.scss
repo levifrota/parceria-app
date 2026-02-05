@@ -1,0 +1,60 @@
+// Quasar SCSS (& Sass) Variables
+// --------------------------------------------------
+// To customize the look and feel of this app, you can override
+// the Sass/SCSS variables found in Quasar's source Sass/SCSS files.
+
+// Check documentation for full list of Quasar variables
+
+// Your own variables (that are declared here) and Quasar's own
+// ones will be available out of the box in your .vue/.scss/.sass files
+
+// It's highly recommended to change the default colors
+// to match your app's branding.
+// Tip: Use the "Theme Builder" on Quasar's documentation website.
+
+$primary: #7f22fe;
+$secondary: #64748b;
+$accent: #8b5cf6;
+
+$dark: #020817;
+$dark-page: #121212;
+
+$positive: #22c55e;
+$negative: #ef4444;
+$info: #3b82f6;
+$warning: #f59e0b;
+
+// Background colors
+$background: #ffffff;
+$surface: #f8fafc;
+$border: #e2e8f0;
+
+// Text colors
+$text-primary: #0f172a;
+$text-secondary: #475569;
+$text-muted: #94a3b8;
+
+// Border radius (shadcn style) - usando px para compatibilidade com Quasar
+$generic-border-radius: 8px;
+$button-border-radius: 6px;
+$card-border-radius: 8px;
+
+// Shadows (shadcn style)
+$shadow-1: 0 1px 2px 0 rgb(0 0 0 / 0.05);
+$shadow-2:
+  0 1px 3px 0 rgb(0 0 0 / 0.1),
+  0 1px 2px -1px rgb(0 0 0 / 0.1);
+$shadow-3:
+  0 4px 6px -1px rgb(0 0 0 / 0.1),
+  0 2px 4px -2px rgb(0 0 0 / 0.1);
+$shadow-4:
+  0 10px 15px -3px rgb(0 0 0 / 0.1),
+  0 4px 6px -4px rgb(0 0 0 / 0.1);
+
+// Typography
+$h1-font-size: 2.25rem;
+$h2-font-size: 1.875rem;
+$h3-font-size: 1.5rem;
+$h4-font-size: 1.25rem;
+$h5-font-size: 1.125rem;
+$h6-font-size: 1rem;
