@@ -1,6 +1,6 @@
 {
   "appId": "org.capacitor.quasar.app",
-  "appName": "Parceria da Gestante",
+  "appName": "Parceria ao Lado",
   "webDir": "www",
   "android": {
     "allowMixedContent": true,

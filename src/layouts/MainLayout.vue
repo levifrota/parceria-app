@@ -4,7 +4,7 @@
       <q-toolbar>
         <q-btn flat dense round icon="menu" aria-label="Menu" @click="toggleLeftDrawer" />
 
-        <q-toolbar-title> Parceria da Gestante </q-toolbar-title>
+        <q-toolbar-title> Parceria ao Lado </q-toolbar-title>
 
         <q-btn flat round dense icon="account_circle" @click="goToProfile" />
       </q-toolbar>

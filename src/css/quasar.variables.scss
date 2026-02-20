@@ -1,49 +1,133 @@
-// Quasar SCSS Variables com tema shadcn-vue
-// Inspirado em: https://www.shadcn-vue.com/docs/components
-
 // ============================================
-// COLOR PALETTE (shadcn-vue inspired)
+// SHADCN-VUE CSS VARIABLES
+// Baseado em: https://www.shadcn-vue.com/docs/theming
+// https://github.com/unovue/shadcn-vue
 // ============================================
-$primary: #7f22fe;
-$secondary: #64748b;
-$accent: #8b5cf6;
 
-$dark: #020817;
-$dark-page: #121212;
+// CSS Variables (formato HSL como shadcn-vue)
+:root {
+  // Base colors - Zinc theme (shadcn-vue default)
+  --background: 0 0% 100%;
+  --foreground: 240 10% 3.9%;
 
+  --card: 0 0% 100%;
+  --card-foreground: 240 10% 3.9%;
+
+  --popover: 0 0% 100%;
+  --popover-foreground: 240 10% 3.9%;
+
+  --primary: 265 99% 56%;
+  --primary-foreground: 0 0% 98%;
+
+  --secondary: 240 4.8% 95.9%;
+  --secondary-foreground: 240 5.9% 10%;
+
+  --muted: 240 4.8% 95.9%;
+  --muted-foreground: 240 3.8% 46.1%;
+
+  --accent: 240 4.8% 95.9%;
+  --accent-foreground: 240 5.9% 10%;
+
+  --destructive: 0 84.2% 60.2%;
+  --destructive-foreground: 0 0% 98%;
+
+  --border: 240 5.9% 90%;
+  --input: 240 5.9% 90%;
+  --ring: 265 99% 56%;
+
+  --radius: 0.5rem;
+}
+
+// Dark theme
+body.body--dark {
+  --background: 240 10% 3.9%;
+  --foreground: 0 0% 98%;
+
+  --card: 240 10% 3.9%;
+  --card-foreground: 0 0% 98%;
+
+  --popover: 240 10% 3.9%;
+  --popover-foreground: 0 0% 98%;
+
+  --primary: 265 99% 56%;
+  --primary-foreground: 0 0% 98%;
+
+  --secondary: 240 3.7% 15.9%;
+  --secondary-foreground: 0 0% 98%;
+
+  --muted: 240 3.7% 15.9%;
+  --muted-foreground: 240 5% 64.9%;
+
+  --accent: 240 3.7% 15.9%;
+  --accent-foreground: 0 0% 98%;
+
+  --destructive: 0 62.8% 30.6%;
+  --destructive-foreground: 0 0% 98%;
+
+  --border: 240 3.7% 15.9%;
+  --input: 240 3.7% 15.9%;
+  --ring: 265 99% 56%;
+}
+
+// SCSS Variables (conversão de CSS vars para uso em SCSS)
+$background: hsl(var(--background));
+$foreground: hsl(var(--foreground));
+
+$card: hsl(var(--card));
+$card-foreground: hsl(var(--card-foreground));
+
+$popover: hsl(var(--popover));
+$popover-foreground: hsl(var(--popover-foreground));
+
+$primary: hsl(var(--primary));
+$primary-foreground: hsl(var(--primary-foreground));
+
+$secondary: hsl(var(--secondary));
+$secondary-foreground: hsl(var(--secondary-foreground));
+
+$muted: hsl(var(--muted));
+$muted-foreground: hsl(var(--muted-foreground));
+
+$accent: hsl(var(--accent));
+$accent-foreground: hsl(var(--accent-foreground));
+
+$destructive: hsl(var(--destructive));
+$destructive-foreground: hsl(var(--destructive-foreground));
+
+$border: hsl(var(--border));
+$input: hsl(var(--input));
+$ring: hsl(var(--ring));
+
+// Quasar compatibility
 $positive: #22c55e;
-$negative: #ef4444;
+$negative: $destructive;
 $info: #3b82f6;
 $warning: #f59e0b;
+$dark: hsl(var(--background));
+$dark-page: hsl(var(--card));
 
-// Background colors
-$background: #ffffff;
-$surface: #f8fafc;
-$border: #e2e8f0;
+// Border radius (shadcn-vue style)
+$radius: var(--radius);
+$generic-border-radius: var(--radius);
+$button-border-radius: var(--radius);
+$card-border-radius: calc(var(--radius) + 2px);
 
-// Text colors
-$text-primary: #0f172a;
-$text-secondary: #475569;
-$text-muted: #94a3b8;
-
-// Border radius (shadcn style) - usando px para compatibilidade com Quasar
-$generic-border-radius: 8px;
-$button-border-radius: 6px;
-$card-border-radius: 8px;
-
-// Shadows (shadcn style)
-$shadow-1: 0 1px 2px 0 rgb(0 0 0 / 0.05);
-$shadow-2:
+// Shadows (shadcn-vue exact style)
+$shadow-xs: 0 1px 2px 0 rgb(0 0 0 / 0.05);
+$shadow-sm:
   0 1px 3px 0 rgb(0 0 0 / 0.1),
   0 1px 2px -1px rgb(0 0 0 / 0.1);
-$shadow-3:
+$shadow-md:
   0 4px 6px -1px rgb(0 0 0 / 0.1),
   0 2px 4px -2px rgb(0 0 0 / 0.1);
-$shadow-4:
+$shadow-lg:
   0 10px 15px -3px rgb(0 0 0 / 0.1),
   0 4px 6px -4px rgb(0 0 0 / 0.1);
+$shadow-xl:
+  0 20px 25px -5px rgb(0 0 0 / 0.1),
+  0 8px 10px -6px rgb(0 0 0 / 0.1);
 
-// Typography
+// Typography (shadcn-vue style)
 $h1-font-size: 2.25rem;
 $h2-font-size: 1.875rem;
 $h3-font-size: 1.5rem;

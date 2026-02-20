@@ -23,7 +23,7 @@
         <div class="text-caption text-grey-7">Tempo da contração atual</div>
       </div>
 
-      <div class="q-gutter-md">
+      <div class="w">
         <q-btn
           v-if="!isTimerRunning"
           @click="startContraction"

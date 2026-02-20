@@ -54,15 +54,29 @@
           />
 
           <!-- Conteúdo HTML (apenas para articles) -->
-          <q-input
-            v-if="form.type === 'article'"
-            v-model="form.content"
-            label="Conteúdo (HTML)"
-            outlined
-            type="textarea"
-            rows="8"
-            hint="Pode usar HTML: <p>, <h3>, <strong>, <ul>, <li>, etc."
-          />
+          <div v-if="form.type === 'article'">
+            <div class="row items-center q-mb-xs">
+              <div class="text-subtitle2">Conteúdo (HTML)</div>
+              <q-space />
+              <q-btn
+                flat
+                dense
+                color="primary"
+                icon="image"
+                label="Inserir Imagem"
+                size="sm"
+                @click="openImageDialog"
+              />
+            </div>
+            <q-input
+              ref="contentTextarea"
+              v-model="form.content"
+              outlined
+              type="textarea"
+              rows="8"
+              hint="Pode usar HTML: <p>, <h3>, <strong>, <ul>, <li>, etc. Clique no cursor onde deseja inserir a imagem."
+            />
+          </div>
 
           <!-- URL (para vídeos e podcasts) -->
           <q-input
@@ -276,6 +290,136 @@
         </q-tab-panels>
       </q-card-section>
     </q-card>
+
+    <!-- Diálogo de Gerenciamento de Imagens -->
+    <q-dialog v-model="imageDialog" persistent>
+      <q-card style="min-width: 500px; max-width: 700px">
+        <q-card-section class="row items-center q-pb-none">
+          <div class="text-h6">Gerenciar Imagens</div>
+          <q-space />
+          <q-btn icon="close" flat round dense v-close-popup />
+        </q-card-section>
+
+        <q-card-section>
+          <q-tabs
+            v-model="imageTab"
+            dense
+            class="text-grey"
+            active-color="primary"
+            indicator-color="primary"
+          >
+            <q-tab name="url" label="Inserir URL" icon="link" />
+            <q-tab name="gallery" label="Galeria" icon="collections" />
+          </q-tabs>
+
+          <q-separator />
+
+          <q-tab-panels v-model="imageTab" animated>
+            <!-- Aba de Inserir URL -->
+            <q-tab-panel name="url">
+              <div class="q-gutter-md">
+                <q-input
+                  v-model="imageUrl"
+                  label="URL da Imagem (ImgBB)"
+                  outlined
+                  placeholder="https://i.ibb.co/..."
+                  hint="Cole aqui a URL da imagem já enviada no ImgBB"
+                  @update:model-value="loadImagePreview"
+                >
+                  <template v-slot:prepend>
+                    <q-icon name="link" />
+                  </template>
+                </q-input>
+
+                <q-input
+                  v-model="imageName"
+                  label="Nome (opcional)"
+                  outlined
+                  placeholder="Ex: Logo parceria"
+                />
+
+                <q-input
+                  v-model="imageDescription"
+                  label="Descrição (opcional)"
+                  outlined
+                  type="textarea"
+                  rows="2"
+                  placeholder="Descrição para alt da imagem"
+                />
+
+                <!-- Preview da imagem -->
+                <div v-if="imagePreview" class="q-mt-md">
+                  <div class="text-caption q-mb-xs">Preview:</div>
+                  <img
+                    :src="imagePreview"
+                    style="max-width: 100%; max-height: 300px; border-radius: 8px"
+                    class="shadow-2"
+                    @error="imagePreview = null"
+                  />
+                </div>
+
+                <!-- Botões -->
+                <div class="row q-gutter-sm q-mt-md">
+                  <q-btn
+                    label="Inserir no Artigo"
+                    color="primary"
+                    icon="add_photo_alternate"
+                    :disable="!imageUrl"
+                    @click="insertImageFromUrl"
+                  />
+                  <q-btn
+                    label="Salvar na Galeria"
+                    color="secondary"
+                    icon="save"
+                    outline
+                    :loading="saving"
+                    :disable="!imageUrl || saving"
+                    @click="saveImageToGallery"
+                  />
+                  <q-btn label="Cancelar" flat @click="closeImageDialog" />
+                </div>
+              </div>
+            </q-tab-panel>
+
+            <!-- Aba de Galeria -->
+            <q-tab-panel name="gallery">
+              <div v-if="loadingImages" class="text-center q-pa-md">
+                <q-spinner color="primary" size="3em" />
+                <div class="q-mt-md">Carregando imagens...</div>
+              </div>
+
+              <div v-else-if="images.length === 0" class="text-center q-pa-md text-grey">
+                Nenhuma imagem salva. Use a aba "Inserir URL" para adicionar imagens do ImgBB.
+              </div>
+
+              <div v-else class="row q-col-gutter-md">
+                <div v-for="image in images" :key="image.id" class="col-6 col-sm-4">
+                  <q-card class="cursor-pointer" @click="insertImageFromGallery(image)">
+                    <q-img :src="image.url" ratio="1" />
+                    <q-card-section class="q-pa-sm">
+                      <div class="text-caption ellipsis">{{ image.name }}</div>
+                      <div class="text-caption text-grey-7" v-if="image.description">
+                        {{ image.description }}
+                      </div>
+                    </q-card-section>
+                    <q-card-actions align="right">
+                      <q-btn
+                        flat
+                        dense
+                        color="negative"
+                        icon="delete"
+                        size="sm"
+                        @click.stop="confirmDeleteImage(image)"
+                      />
+                    </q-card-actions>
+                  </q-card>
+                </div>
+              </div>
+            </q-tab-panel>
+          </q-tab-panels>
+        </q-card-section>
+      </q-card>
+    </q-dialog>
   </q-page>
 </template>
 
@@ -287,6 +431,9 @@ import { firebaseAdmin } from 'src/services/firebaseAdmin'
 
 const $q = useQuasar()
 const contentStore = useContentStore()
+
+// Refs
+const contentTextarea = ref(null)
 
 const form = ref({
   type: 'article',
@@ -305,6 +452,16 @@ const editingContent = ref(null)
 const saving = ref(false)
 const loading = ref(false)
 const activeTab = ref('labor')
+
+// Estados do diálogo de imagens
+const imageDialog = ref(false)
+const imageTab = ref('url')
+const imageUrl = ref('')
+const imageName = ref('')
+const imageDescription = ref('')
+const imagePreview = ref(null)
+const images = ref([])
+const loadingImages = ref(false)
 
 const typeOptions = [
   { label: 'Artigo', value: 'article' },
@@ -477,6 +634,217 @@ const deleteContent = async (contentId) => {
     $q.notify({
       type: 'negative',
       message: 'Erro ao excluir conteúdo: ' + error.message,
+      position: 'top',
+    })
+  }
+}
+
+// ===== FUNÇÕES DE GERENCIAMENTO DE IMAGENS =====
+
+/**
+ * Abrir diálogo de imagens
+ */
+const openImageDialog = async () => {
+  imageDialog.value = true
+  imageTab.value = 'url'
+  await loadImages()
+}
+
+/**
+ * Fechar diálogo de imagens
+ */
+const closeImageDialog = () => {
+  imageDialog.value = false
+  imageUrl.value = ''
+  imageName.value = ''
+  imageDescription.value = ''
+  imagePreview.value = null
+}
+
+/**
+ * Carregar preview da imagem pela URL
+ */
+const loadImagePreview = (url) => {
+  if (url && (url.startsWith('http://') || url.startsWith('https://'))) {
+    imagePreview.value = url
+  } else {
+    imagePreview.value = null
+  }
+}
+
+/**
+ * Inserir imagem diretamente pela URL
+ */
+const insertImageFromUrl = () => {
+  if (!imageUrl.value) {
+    $q.notify({
+      type: 'warning',
+      message: 'Insira uma URL válida',
+      position: 'top',
+    })
+    return
+  }
+
+  const alt = imageDescription.value || imageName.value || 'imagem'
+  insertImageTag(imageUrl.value, alt)
+
+  $q.notify({
+    type: 'positive',
+    message: 'Imagem inserida no artigo!',
+    position: 'top',
+  })
+
+  // Resetar campos
+  imageUrl.value = ''
+  imageName.value = ''
+  imageDescription.value = ''
+  imagePreview.value = null
+}
+
+/**
+ * Salvar URL da imagem na galeria
+ */
+const saveImageToGallery = async () => {
+  if (!imageUrl.value) {
+    $q.notify({
+      type: 'warning',
+      message: 'Insira uma URL válida',
+      position: 'top',
+    })
+    return
+  }
+
+  saving.value = true
+
+  try {
+    const imageData = await firebaseAdmin.saveImageUrl({
+      url: imageUrl.value,
+      name: imageName.value || 'Imagem',
+      description: imageDescription.value || '',
+    })
+
+    $q.notify({
+      type: 'positive',
+      message: 'Imagem salva na galeria!',
+      position: 'top',
+    })
+
+    // Adicionar à lista local
+    images.value.unshift(imageData)
+
+    // Resetar campos
+    imageUrl.value = ''
+    imageName.value = ''
+    imageDescription.value = ''
+    imagePreview.value = null
+  } catch (error) {
+    console.error('Erro ao salvar imagem:', error)
+    $q.notify({
+      type: 'negative',
+      message: 'Erro ao salvar imagem: ' + error.message,
+      position: 'top',
+    })
+  } finally {
+    saving.value = false
+  }
+}
+
+/**
+ * Carregar imagens da galeria
+ */
+const loadImages = async () => {
+  loadingImages.value = true
+  try {
+    images.value = await firebaseAdmin.getAllImages()
+  } catch (error) {
+    console.error('Erro ao carregar imagens:', error)
+    $q.notify({
+      type: 'negative',
+      message: 'Erro ao carregar imagens',
+      position: 'top',
+    })
+  } finally {
+    loadingImages.value = false
+  }
+}
+
+/**
+ * Inserir imagem da galeria
+ */
+const insertImageFromGallery = (image) => {
+  const alt = image.description || image.name || 'imagem'
+  insertImageTag(image.url, alt)
+  $q.notify({
+    type: 'positive',
+    message: 'Imagem inserida com sucesso!',
+    position: 'top',
+  })
+  imageDialog.value = false
+}
+
+/**
+ * Inserir tag <img> na posição do cursor no textarea
+ */
+const insertImageTag = (url, alt = 'imagem') => {
+  const textarea = contentTextarea.value?.$el?.querySelector('textarea')
+  if (!textarea) {
+    console.error('Textarea não encontrado')
+    return
+  }
+
+  const startPos = textarea.selectionStart
+  const endPos = textarea.selectionEnd
+  const currentContent = form.value.content || ''
+
+  // Tag HTML da imagem com classe para estilo
+  const imageTag = `<img src="${url}" alt="${alt}" class="content-image" style="max-width: 100%; height: auto; border-radius: 8px; margin: 16px 0;" />`
+
+  // Inserir na posição do cursor
+  const newContent =
+    currentContent.substring(0, startPos) + imageTag + currentContent.substring(endPos)
+
+  form.value.content = newContent
+
+  // Focar o textarea novamente e posicionar cursor após a imagem
+  setTimeout(() => {
+    textarea.focus()
+    const newCursorPos = startPos + imageTag.length
+    textarea.setSelectionRange(newCursorPos, newCursorPos)
+  }, 10)
+}
+
+/**
+ * Confirmar exclusão de imagem
+ */
+const confirmDeleteImage = (image) => {
+  $q.dialog({
+    title: 'Confirmar exclusão',
+    message: `Deseja realmente excluir a imagem "${image.name}" da galeria? Esta ação não afetará artigos que já usam esta imagem.`,
+    cancel: true,
+    persistent: true,
+  }).onOk(async () => {
+    await deleteImage(image)
+  })
+}
+
+/**
+ * Deletar imagem da galeria
+ */
+const deleteImage = async (image) => {
+  try {
+    await firebaseAdmin.deleteImage(image.id)
+    $q.notify({
+      type: 'positive',
+      message: 'Imagem excluída da galeria!',
+      position: 'top',
+    })
+    // Remover da lista local
+    images.value = images.value.filter((img) => img.id !== image.id)
+  } catch (error) {
+    console.error('Erro ao excluir imagem:', error)
+    $q.notify({
+      type: 'negative',
+      message: 'Erro ao excluir imagem: ' + error.message,
       position: 'top',
     })
   }

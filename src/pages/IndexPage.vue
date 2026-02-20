@@ -31,31 +31,33 @@
     <div class="row q-col-gutter-md">
       <div class="col-12 col-md-6">
         <q-card class="category-card" @click="navigateTo('/labor')">
-          <q-card-section class="bg-orange text-white">
-            <q-icon name="favorite" size="48px" />
-            <div class="text-h5 q-mt-sm">Parto</div>
-            <div class="text-caption text-black">Preparação e informações</div>
-          </q-card-section>
+          <q-img :src="laborUrl" :ratio="16 / 9" spinner-color="white" spinner-size="82px">
+            <div class="absolute-full card-overlay flex column justify-end q-pa-md">
+              <div class="text-h5 text-white text-weight-bold">Parto</div>
+              <div class="text-caption text-white">Preparação e informações</div>
+            </div>
+          </q-img>
         </q-card>
       </div>
 
       <div class="col-12 col-md-6">
         <q-card class="category-card" @click="navigateTo('/postpartum')">
-          <q-card-section class="bg-pink text-white">
-            <q-icon name="child_care" size="48px" />
-            <div class="text-h5 q-mt-sm">Pós-parto</div>
-            <div class="text-caption text-black">Cuidados após o nascimento</div>
-          </q-card-section>
+          <q-img :src="postpartumUrl" :ratio="16 / 9" spinner-color="white" spinner-size="82px">
+            <div class="absolute-full card-overlay flex column justify-end q-pa-md">
+              <div class="text-h5 text-white text-weight-bold">Pós-parto</div>
+              <div class="text-caption text-white">Cuidados após o nascimento</div>
+            </div>
+          </q-img>
         </q-card>
       </div>
 
       <div class="col-12 col-md-6">
         <q-card class="category-card" @click="navigateTo('/contractions')">
-          <q-card-section class="bg-red text-white">
-            <q-icon name="timer" size="48px" />
-            <div class="text-h5 q-mt-sm">Contrações</div>
-            <div class="text-caption text-black">Contador de contrações</div>
-          </q-card-section>
+          <div class="contractions-bg flex column justify-end q-pa-md">
+            <q-icon name="timer" size="48px" color="white" class="q-mb-xs" />
+            <div class="text-h5 text-white text-weight-bold">Contrações</div>
+            <div class="text-caption text-white">Contador de contrações</div>
+          </div>
         </q-card>
       </div>
     </div>
@@ -93,8 +95,11 @@ const greeting = computed(() => {
   if (profile.parent1Name) {
     return `${pregnancyStore.greetingMessage}, ${profile.parent1Name}!`
   }
-  return 'Parceria da Gestante'
+  return 'Parceria ao Lado'
 })
+
+const laborUrl = 'https://i.ibb.co/LXjc7T81/img-parto.png'
+const postpartumUrl = 'https://i.ibb.co/rfsQY4w6/img-post-parto.png'
 
 const favoriteContents = computed(() => {
   if (!pregnancyStore.favoriteContent || pregnancyStore.favoriteContent.length === 0) {
@@ -126,11 +131,12 @@ const navigateTo = (path) => {
   box-shadow: 0 12px 24px rgba(0, 0, 0, 0.15);
 }
 
-.category-card .q-card__section {
+.card-overlay {
+  background: linear-gradient(to bottom, rgba(0, 0, 0, 0.05) 0%, rgba(0, 0, 0, 0.55) 100%);
+}
+
+.contractions-bg {
   height: 180px;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
+  background: linear-gradient(135deg, #c62828, #e53935);
 }
 </style>

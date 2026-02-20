@@ -1,7 +1,10 @@
-@use 'sass:color';
 @import './quasar.variables.scss';
 
-// Global shadcn-vue inspired styles for Quasar components
+// ============================================
+// shadcn-vue EXACT STYLES for Quasar Components
+// Based on: https://www.shadcn-vue.com/docs/components
+// Repository: https://github.com/unovue/shadcn-vue
+// ============================================
 
 // ============================================
 // SAFE AREA SUPPORT (Mobile Notch/Navigation)
@@ -20,10 +23,15 @@ body {
 }
 
 // ============================================
-// BASE STYLES (shadcn-vue)
+// BASE STYLES (shadcn-vue exact)
 // ============================================
-* {
-  border-color: $border;
+*,
+::before,
+::after {
+  box-sizing: border-box;
+  border-width: 0;
+  border-style: solid;
+  border-color: hsl(var(--border));
 }
 
 body {
@@ -32,29 +40,34 @@ body {
     'Fira Sans', 'Droid Sans', 'Helvetica Neue', sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
-  color: $text-primary;
-  background-color: $background;
+  color: hsl(var(--foreground));
+  background-color: hsl(var(--background));
   font-size: 14px;
   line-height: 1.5;
 }
 
 // Layout safe area adjustments
 .q-layout {
-  // Não adicionar padding no layout principal
+  background-color: hsl(var(--background));
 }
 
-// Header safe area - fica fixo no topo respeitando safe area
+// Header safe area
 .q-header {
   padding-top: env(safe-area-inset-top);
+  background-color: hsl(var(--background));
+  border-bottom: 1px solid hsl(var(--border));
 
   .q-toolbar {
     min-height: 50px;
+    background-color: transparent;
   }
 }
 
-// Footer safe area - fica fixo no bottom respeitando safe area
+// Footer safe area
 .q-footer {
   padding-bottom: env(safe-area-inset-bottom);
+  background-color: hsl(var(--background));
+  border-top: 1px solid hsl(var(--border));
 }
 
 // Drawer safe areas
@@ -62,6 +75,7 @@ body {
   top: 0;
   padding-top: env(safe-area-inset-top);
   padding-bottom: env(safe-area-inset-bottom);
+  background-color: hsl(var(--background));
 
   &--left {
     padding-left: env(safe-area-inset-left);
@@ -72,17 +86,15 @@ body {
   }
 }
 
-// Page container - conteúdo das páginas
+// Page container
 .q-page-container {
-  // O topo já é respeitado pelo header
   padding-left: env(safe-area-inset-left);
   padding-right: env(safe-area-inset-right);
   padding-bottom: env(safe-area-inset-bottom);
 }
 
-// Pages devem respeitar o padding do container
+// Pages
 .q-page {
-  // Adicionar padding interno para conteúdo não grudar nas bordas
   padding-left: max(1rem, env(safe-area-inset-left));
   padding-right: max(1rem, env(safe-area-inset-right));
   padding-bottom: env(safe-area-inset-bottom);
@@ -97,180 +109,163 @@ body {
 }
 
 // ============================================
-// BUTTON (shadcn-vue style) - Mobile Optimized
+// BUTTON (shadcn-vue Button exact)
+// Reference: shadcn-vue/button.vue
 // ============================================
 .q-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  white-space: nowrap;
+  border-radius: calc(var(--radius));
+  font-size: 0.875rem;
   font-weight: 500;
   text-transform: none;
   letter-spacing: normal;
-  border-radius: $button-border-radius;
-  transition: all 0.15s cubic-bezier(0.4, 0, 0.2, 1);
-  padding: 0.625rem 1rem;
-  font-size: 0.9375rem;
-  line-height: 1.25rem;
-  min-height: 2.75rem;
+  transition-property: color, background-color, border-color, text-decoration-color, fill, stroke;
+  transition-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
+  transition-duration: 150ms;
+  padding: 0.5rem 1rem;
+  height: 2.25rem;
+  min-height: 2.25rem;
 
-  // Default (solid) variant
+  &:focus-visible {
+    outline: none;
+    ring: 3px;
+    ring-color: hsla(var(--ring) / 0.5);
+    border-color: hsl(var(--ring));
+    box-shadow: 0 0 0 3px hsla(var(--ring) / 0.5);
+  }
+
+  &:disabled,
+  &.disabled {
+    pointer-events: none;
+    opacity: 0.5;
+  }
+
+  // Default variant - bg-primary text-primary-foreground shadow-sm
   &:not(.q-btn--outline):not(.q-btn--flat):not(.q-btn--unelevated) {
-    box-shadow: 0 1px 2px 0 rgba(0, 0, 0, 0.05);
+    background-color: hsl(var(--primary));
+    color: hsl(var(--primary-foreground));
+    box-shadow:
+      0 1px 3px 0 rgb(0 0 0 / 0.1),
+      0 1px 2px -1px rgb(0 0 0 / 0.1);
 
     &:hover {
-      box-shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.1);
-      filter: brightness(0.95);
-    }
-
-    &:active {
-      box-shadow: none;
-      transform: scale(0.98);
+      background-color: hsla(var(--primary) / 0.9);
     }
   }
 
-  // Outline variant
+  // Outline variant - border border-input bg-background shadow-xs
   &.q-btn--outline {
-    border: 1px solid $border;
-    background-color: transparent;
-    box-shadow: none;
+    border: 1px solid hsl(var(--input));
+    background-color: hsl(var(--background));
+    color: hsl(var(--foreground));
+    box-shadow: 0 1px 2px 0 rgb(0 0 0 / 0.05);
 
     &:hover {
-      background-color: $surface;
-      border-color: color.scale($border, $lightness: -10%);
-    }
-
-    &:active {
-      background-color: color.scale($surface, $lightness: -5%);
-      transform: scale(0.98);
+      background-color: hsl(var(--accent));
+      color: hsl(var(--accent-foreground));
     }
   }
 
-  // Ghost/Flat variant
+  // Ghost variant - hover:bg-accent hover:text-accent-foreground
   &.q-btn--flat {
-    box-shadow: none;
     background-color: transparent;
-
-    &:hover {
-      background-color: $surface;
-    }
-
-    &:active {
-      background-color: color.scale($surface, $lightness: -5%);
-      transform: scale(0.98);
-    }
-  }
-
-  // Unelevated variant
-  &.q-btn--unelevated {
     box-shadow: none;
 
     &:hover {
-      filter: brightness(0.95);
-    }
-
-    &:active {
-      transform: scale(0.98);
+      background-color: hsl(var(--accent));
+      color: hsl(var(--accent-foreground));
     }
   }
 
-  // Size variants (mobile optimized)
+  // Secondary variant
+  &.q-btn--unelevated {
+    background-color: hsl(var(--secondary));
+    color: hsl(var(--secondary-foreground));
+    box-shadow:
+      0 1px 3px 0 rgb(0 0 0 / 0.1),
+      0 1px 2px -1px rgb(0 0 0 / 0.1);
+
+    &:hover {
+      background-color: hsla(var(--secondary) / 0.8);
+    }
+  }
+
+  // Size sm - h-8
   &.q-btn--dense {
-    padding: 0.375rem 0.875rem;
-    font-size: 0.875rem;
-    min-height: 2.25rem;
+    height: 2rem;
+    min-height: 2rem;
+    padding: 0.375rem 0.75rem;
+    font-size: 0.8125rem;
   }
 
+  // Size lg - h-10
   &.q-btn--lg {
-    padding: 0.75rem 1.5rem;
-    font-size: 1rem;
-    min-height: 3rem;
+    height: 2.5rem;
+    min-height: 2.5rem;
+    padding: 0.625rem 1.5rem;
+    font-size: 0.9375rem;
   }
 
-  // Icon only - mobile touch target
-  &.q-btn--round {
-    padding: 0.625rem;
-    min-width: 2.75rem;
-    min-height: 2.75rem;
+  // Icon button
+  &.q-btn--round,
+  &.q-btn--fab {
+    padding: 0.5rem;
+    width: 2.25rem;
+    height: 2.25rem;
+    min-width: 2.25rem;
+    min-height: 2.25rem;
 
     &.q-btn--dense {
-      padding: 0.5rem;
-      min-width: 2.25rem;
-      min-height: 2.25rem;
+      width: 2rem;
+      height: 2rem;
+      min-width: 2rem;
+      min-height: 2rem;
     }
-  }
-
-  // Disabled state
-  &.disabled {
-    opacity: 0.5;
-    pointer-events: none;
-  }
-
-  // Icon spacing fix
-  .q-icon {
-    font-size: 1.25rem;
   }
 
   .q-btn__content {
-    gap: 0.5rem;
+    gap: 0.4rem;
+  }
+
+  .q-icon {
+    font-size: 1rem;
   }
 }
 
 // ============================================
-// CARD (shadcn-vue style) - Mobile Optimized
-// ============================================
-.q-card {
-  border-radius: $card-border-radius;
-  border: 1px solid $border;
-  background-color: $background;
-  box-shadow: 0 1px 2px 0 rgba(0, 0, 0, 0.05);
-  transition: all 0.15s cubic-bezier(0.4, 0, 0.2, 1);
-
-  &__section {
-    padding: 1rem;
-
-    &--vert {
-      padding: 0.75rem 1rem;
-    }
-  }
-
-  &__actions {
-    padding: 0.75rem 1rem;
-    border-top: 1px solid $border;
-    gap: 0.5rem;
-
-    // Fix alignment on mobile
-    &--horiz {
-      > .q-btn {
-        flex: 1;
-        min-width: 0;
-      }
-    }
-  }
-}
-
-// ============================================
-// INPUT & FIELD (shadcn-vue style) - Mobile Fixed
+// INPUT & FIELD (shadcn-vue Input exact)
+// Reference: shadcn-vue/input.vue
 // ============================================
 .q-field {
   margin-bottom: 1rem;
 
   &__control {
-    border-radius: $button-border-radius;
-    border: 1px solid $border;
-    background-color: $background;
-    min-height: 2.75rem;
-    height: auto;
-    padding: 0;
-    transition: all 0.15s cubic-bezier(0.4, 0, 0.2, 1);
-    box-shadow: 0 1px 2px 0 rgba(0, 0, 0, 0.05);
+    display: flex;
+    align-items: center;
+    height: 2.25rem;
+    min-height: 2.25rem;
+    width: 100%;
+    border-radius: calc(var(--radius));
+    border: 1px solid hsl(var(--input));
+    background-color: transparent;
+    padding: 0.5rem 0.75rem;
+    font-size: 0.875rem;
+    box-shadow: 0 1px 2px 0 rgb(0 0 0 / 0.05);
+    transition:
+      color,
+      border-color,
+      box-shadow 150ms cubic-bezier(0.4, 0, 0.2, 1);
 
-    &::before {
-      display: none;
-    }
-
+    &::before,
     &::after {
       display: none;
     }
 
     &:hover {
-      border-color: color.scale($border, $lightness: -20%);
+      border-color: hsla(var(--input) / 0.8);
     }
   }
 
@@ -281,121 +276,93 @@ body {
 
   &__native,
   &__input {
-    color: $text-primary;
-    padding: 0.625rem 0.875rem;
-    font-size: 0.9375rem;
-    line-height: 1.5;
-    min-height: 2.75rem;
+    color: hsl(var(--foreground));
+    padding: 0.5rem 0.75rem;
+    font-size: 0.875rem;
+    line-height: 1.25rem;
+    height: 2.25rem;
+    min-height: 2.25rem;
 
     &::placeholder {
-      color: $text-muted;
+      color: hsl(var(--muted-foreground));
       opacity: 1;
+    }
+
+    &:focus {
+      outline: none;
     }
   }
 
   &__label {
-    color: $text-muted;
-    font-weight: 500;
+    color: hsl(var(--muted-foreground));
     font-size: 0.875rem;
-    padding-left: 0.875rem;
-    padding-right: 0.875rem;
+    font-weight: 500;
+    padding-left: 0.75rem;
+    padding-right: 0.75rem;
     top: 50%;
     transform: translateY(-50%);
     line-height: 1;
   }
 
-  // Fix for floating label
-  &--float {
-    .q-field__label {
-      transform: translateY(-140%) scale(0.85);
-      padding-left: 0;
-      padding-right: 0;
-    }
+  &--float .q-field__label {
+    transform: translateY(-140%) scale(0.85);
+    padding-left: 0;
+    padding-right: 0;
   }
 
   &__bottom {
-    padding: 0.375rem 0.875rem 0;
+    padding: 0.375rem 0.75rem 0;
     min-height: 1.5rem;
   }
 
   &__messages {
-    color: $text-muted;
-    font-size: 0.8125rem;
-    line-height: 1.4;
+    color: hsl(var(--muted-foreground));
+    font-size: 0.75rem;
+    line-height: 1.25rem;
   }
 
+  // Focus state - focus-visible:ring-[3px] focus-visible:ring-ring/50
   &--focused {
     .q-field__control {
-      border-color: $primary;
-      box-shadow: 0 0 0 3px rgba(127, 34, 254, 0.12);
+      border-color: hsl(var(--ring));
+      box-shadow: 0 0 0 3px hsla(var(--ring) / 0.5);
+      outline: none;
     }
 
     .q-field__label {
-      color: $primary;
+      color: hsl(var(--ring));
     }
   }
 
   &--error {
     .q-field__control {
-      border-color: $negative;
+      border-color: hsl(var(--destructive));
     }
 
-    .q-field__bottom {
-      color: $negative;
-    }
-
+    .q-field__bottom,
     .q-field__messages {
-      color: $negative;
+      color: hsl(var(--destructive));
     }
   }
 
-  // Outlined style
-  &--outlined {
-    .q-field__control {
-      padding: 0;
-    }
-  }
-
-  // Filled style override to match outlined
-  &--filled {
-    .q-field__control {
-      background-color: $background;
-
-      &::before {
-        display: none;
-      }
-    }
-  }
-
-  // Standard style override
-  &--standard {
-    .q-field__control {
-      border: none;
-      border-bottom: 1px solid $border;
-      border-radius: 0;
-      box-shadow: none;
-      padding: 0 0.25rem;
-    }
-  }
-
-  // Prepend/Append icons fix
   &__prepend,
   &__append {
     padding: 0 0.5rem;
     height: auto;
     align-self: center;
+    color: hsl(var(--muted-foreground));
   }
 
   &__append {
-    padding-right: 0.875rem;
+    padding-right: 0.75rem;
   }
 
   &__prepend {
-    padding-left: 0.875rem;
+    padding-left: 0.75rem;
   }
 }
 
-// Textarea - mobile optimized
+// Textarea
 .q-field--auto-height {
   .q-field__control {
     height: auto;
@@ -404,12 +371,55 @@ body {
 
   .q-field__native {
     resize: vertical;
-    padding: 0.75rem 0.875rem;
+    padding: 0.625rem 0.75rem;
   }
 }
 
 // ============================================
-// SELECT (shadcn-vue style) - Mobile Fixed
+// CARD (shadcn-vue Card exact)
+// Reference: shadcn-vue/card.vue
+// ============================================
+.q-card {
+  border-radius: calc(var(--radius) + 2px);
+  border: 1px solid hsl(var(--border));
+  background-color: hsl(var(--card));
+  color: hsl(var(--card-foreground));
+  box-shadow:
+    0 1px 3px 0 rgb(0 0 0 / 0.1),
+    0 1px 2px -1px rgb(0 0 0 / 0.1);
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+  padding: 1.5rem;
+
+  &__section {
+    padding: 0;
+    gap: 0.375rem;
+
+    &:not(:first-child) {
+      padding-top: 1rem;
+    }
+
+    &--vert {
+      padding: 0;
+    }
+  }
+
+  &__actions {
+    padding: 0;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+
+    &:not(:first-child) {
+      padding-top: 1rem;
+    }
+  }
+}
+
+// ============================================
+// SELECT & MENU (shadcn-vue Select exact)
+// Reference: shadcn-vue/select.vue
 // ============================================
 .q-select {
   .q-field__native {
@@ -417,18 +427,21 @@ body {
   }
 
   .q-field__append {
-    padding-right: 0.875rem;
+    padding-right: 0.75rem;
   }
 }
 
 .q-menu {
-  border-radius: $button-border-radius;
-  border: 1px solid $border;
-  box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1);
-  background-color: $background;
-  padding: 0.375rem;
-  margin-top: 0.25rem;
+  border-radius: calc(var(--radius));
+  border: 1px solid hsl(var(--border));
+  background-color: hsl(var(--popover));
+  color: hsl(var(--popover-foreground));
+  box-shadow:
+    0 10px 15px -3px rgb(0 0 0 / 0.1),
+    0 4px 6px -4px rgb(0 0 0 / 0.1);
+  padding: 0.25rem;
   max-height: 60vh;
+  margin-top: 0.25rem;
 
   .q-virtual-scroll__content {
     padding: 0;
@@ -436,28 +449,41 @@ body {
 }
 
 .q-item {
-  border-radius: $button-border-radius;
-  padding: 0.75rem 0.875rem;
-  margin: 0.125rem 0;
-  min-height: 2.75rem;
-  transition: all 0.15s cubic-bezier(0.4, 0, 0.2, 1);
-  font-size: 0.9375rem;
-  color: $text-primary;
+  position: relative;
+  display: flex;
+  align-items: center;
+  border-radius: calc(var(--radius) - 2px);
+  padding: 0.375rem 0.5rem;
+  margin: 0.0625rem 0;
+  min-height: 2rem;
+  font-size: 0.875rem;
+  line-height: 1.25rem;
+  color: hsl(var(--foreground));
+  cursor: pointer;
+  user-select: none;
+  outline: none;
+  transition: all 150ms cubic-bezier(0.4, 0, 0.2, 1);
 
   &:hover {
-    background-color: $surface;
+    background-color: hsl(var(--accent));
+    color: hsl(var(--accent-foreground));
   }
 
-  &.q-item--active {
-    background-color: rgba(127, 34, 254, 0.1);
-    color: $primary;
-    font-weight: 500;
+  &.q-item--active,
+  &[aria-selected='true'] {
+    background-color: hsl(var(--accent));
+    color: hsl(var(--accent-foreground));
+  }
+
+  &:focus {
+    background-color: hsl(var(--accent));
+    color: hsl(var(--accent-foreground));
   }
 
   &__section {
     &--avatar {
-      min-width: 2.5rem;
-      padding-right: 0.75rem;
+      min-width: 2rem;
+      padding-right: 0.5rem;
     }
 
     &--side {
@@ -471,71 +497,77 @@ body {
 }
 
 // ============================================
-// CHECKBOX (shadcn-vue style) - Mobile Fixed
+// CHECKBOX (shadcn-vue Checkbox exact)
+// Reference: shadcn-vue/checkbox.vue
 // ============================================
 .q-checkbox {
   padding: 0.5rem 0;
 
   &__bg {
-    border: 2px solid $border;
-    border-radius: 4px;
-    width: 1.25rem;
-    height: 1.25rem;
-    transition: all 0.15s cubic-bezier(0.4, 0, 0.2, 1);
+    height: 1rem;
+    width: 1rem;
+    border-radius: calc(var(--radius) - 4px);
+    border: 1px solid hsl(var(--primary));
+    background-color: transparent;
+    box-shadow: 0 1px 2px 0 rgb(0 0 0 / 0.05);
+    transition: all 150ms cubic-bezier(0.4, 0, 0.2, 1);
   }
 
   &__svg {
-    width: 1rem;
-    height: 1rem;
+    width: 0.875rem;
+    height: 0.875rem;
+    color: hsl(var(--primary-foreground));
   }
 
   &__inner {
     padding: 0.5rem;
     margin: -0.5rem;
 
-    &--truthy {
-      .q-checkbox__bg {
-        border-color: $primary;
-        background-color: $primary;
-      }
-    }
-
+    &--truthy,
     &--indet {
       .q-checkbox__bg {
-        border-color: $primary;
-        background-color: $primary;
+        background-color: hsl(var(--primary));
+        color: hsl(var(--primary-foreground));
       }
     }
-  }
 
-  &:active {
-    .q-checkbox__bg {
-      transform: scale(0.95);
+    &:focus-visible {
+      .q-checkbox__bg {
+        outline: none;
+        box-shadow:
+          0 0 0 2px hsl(var(--background)),
+          0 0 0 4px hsl(var(--ring));
+      }
     }
   }
 
   &__label {
-    color: $text-primary;
-    font-size: 0.9375rem;
-    padding-left: 0.75rem;
-    line-height: 1.5;
+    color: hsl(var(--foreground));
+    font-size: 0.875rem;
+    font-weight: 500;
+    padding-left: 0.5rem;
+    line-height: 1.25rem;
+    cursor: pointer;
   }
 }
 
 // ============================================
-// RADIO (shadcn-vue style) - Mobile Fixed
+// RADIO (shadcn-vue Radio exact)
+// Reference: shadcn-vue/radio-group.vue
 // ============================================
 .q-radio {
   padding: 0.5rem 0;
 
   &__bg {
-    width: 1.25rem;
-    height: 1.25rem;
+    width: 1rem;
+    height: 1rem;
   }
 
   &__outer {
-    border: 2px solid $border;
-    transition: all 0.15s cubic-bezier(0.4, 0, 0.2, 1);
+    border: 1px solid hsl(var(--primary));
+    border-radius: 100%;
+    transition: all 150ms cubic-bezier(0.4, 0, 0.2, 1);
+    box-shadow: 0 1px 2px 0 rgb(0 0 0 / 0.05);
   }
 
   &__inner {
@@ -547,61 +579,69 @@ body {
 
     &--truthy {
       background-color: transparent;
-      transform: scale(1);
 
       .q-radio__outer {
-        border-color: $primary;
+        border-color: hsl(var(--primary));
       }
 
       &::before {
         content: '';
         position: absolute;
-        width: 0.625rem;
-        height: 0.625rem;
-        border-radius: 50%;
-        background-color: $primary;
+        width: 0.5rem;
+        height: 0.5rem;
+        border-radius: 100%;
+        background-color: hsl(var(--primary));
         top: 50%;
         left: 50%;
         transform: translate(-50%, -50%);
       }
     }
-  }
 
-  &:active {
-    .q-radio__outer {
-      transform: scale(0.95);
+    &:focus-visible {
+      .q-radio__outer {
+        outline: none;
+        box-shadow:
+          0 0 0 2px hsl(var(--background)),
+          0 0 0 4px hsl(var(--ring));
+      }
     }
   }
 
   &__label {
-    color: $text-primary;
-    font-size: 0.9375rem;
-    padding-left: 0.75rem;
-    line-height: 1.5;
+    color: hsl(var(--foreground));
+    font-size: 0.875rem;
+    font-weight: 500;
+    padding-left: 0.5rem;
+    line-height: 1.25rem;
+    cursor: pointer;
   }
 }
 
 // ============================================
-// TOGGLE/SWITCH (shadcn-vue style) - Mobile Optimized
+// SWITCH (shadcn-vue Switch exact)
+// Reference: shadcn-vue/switch.vue
 // ============================================
 .q-toggle {
   padding: 0.5rem 0;
 
   &__track {
-    width: 3rem;
-    height: 1.75rem;
+    width: 2.75rem;
+    height: 1.5rem;
     border-radius: 9999px;
-    background-color: color.scale($border, $lightness: -10%);
+    background-color: hsl(var(--input));
+    box-shadow: 0 1px 2px 0 rgb(0 0 0 / 0.05);
     opacity: 1;
-    transition: all 0.15s cubic-bezier(0.4, 0, 0.2, 1);
+    transition: all 150ms cubic-bezier(0.4, 0, 0.2, 1);
   }
 
   &__thumb {
-    width: 1.375rem;
-    height: 1.375rem;
-    left: 0.1875rem;
-    box-shadow: 0 2px 4px 0 rgba(0, 0, 0, 0.2);
-    transition: all 0.15s cubic-bezier(0.4, 0, 0.2, 1);
+    width: 1.25rem;
+    height: 1.25rem;
+    left: 0.125rem;
+    background-color: hsl(var(--background));
+    border-radius: 9999px;
+    box-shadow: 0 2px 4px 0 rgb(0 0 0 / 0.25);
+    transition: all 150ms cubic-bezier(0.4, 0, 0.2, 1);
 
     &::after {
       box-shadow: none;
@@ -611,127 +651,114 @@ body {
   &__inner {
     padding: 0.5rem;
     margin: -0.5rem;
+    cursor: pointer;
 
     &--truthy {
       .q-toggle__track {
-        background-color: $primary;
+        background-color: hsl(var(--primary));
       }
 
       .q-toggle__thumb {
-        left: calc(100% - 1.5625rem);
+        left: calc(100% - 1.375rem);
       }
     }
-  }
 
-  &:active {
-    .q-toggle__thumb {
-      width: 1.625rem;
+    &:focus-visible {
+      .q-toggle__track {
+        outline: none;
+        box-shadow:
+          0 0 0 2px hsl(var(--background)),
+          0 0 0 4px hsl(var(--ring));
+      }
     }
   }
 
   &__label {
-    color: $text-primary;
-    font-size: 0.9375rem;
-    padding-left: 0.75rem;
-    line-height: 1.5;
+    color: hsl(var(--foreground));
+    font-size: 0.875rem;
+    font-weight: 500;
+    padding-left: 0.5rem;
+    line-height: 1.25rem;
+    cursor: pointer;
   }
 }
 
 // ============================================
-// BADGE (shadcn-vue style)
+// BADGE (shadcn-vue Badge exact)
+// Reference: shadcn-vue/badge.vue
 // ============================================
 .q-badge {
-  border-radius: 9999px;
-  font-weight: 500;
-  padding: 0.1875rem 0.625rem;
+  display: inline-flex;
+  align-items: center;
+  border-radius: calc(var(--radius));
+  padding: 0 0.625rem;
   font-size: 0.75rem;
+  font-weight: 600;
   line-height: 1rem;
+  height: 1.5rem;
   border: 1px solid transparent;
+  background-color: hsl(var(--primary));
+  color: hsl(var(--primary-foreground));
+  box-shadow: 0 1px 2px 0 rgb(0 0 0 / 0.05);
+  transition: all 150ms cubic-bezier(0.4, 0, 0.2, 1);
 
   &--outline {
     background-color: transparent;
-    border-color: currentColor;
+    border-color: hsl(var(--input));
+    color: hsl(var(--foreground));
   }
 }
 
 // ============================================
-// CHIP (shadcn-vue style) - Mobile Optimized
-// ============================================
-.q-chip {
-  border-radius: $button-border-radius;
-  font-weight: 500;
-  border: 1px solid $border;
-  background-color: $surface;
-  color: $text-primary;
-  padding: 0.375rem 0.875rem;
-  font-size: 0.875rem;
-  box-shadow: none;
-  min-height: 2rem;
-
-  &__icon {
-    font-size: 1.125rem;
-  }
-
-  &__content {
-    gap: 0.375rem;
-  }
-
-  &--clickable {
-    transition: all 0.15s cubic-bezier(0.4, 0, 0.2, 1);
-
-    &:hover {
-      background-color: color.scale($surface, $lightness: -5%);
-    }
-
-    &:active {
-      transform: scale(0.98);
-    }
-  }
-
-  &--outline {
-    background-color: transparent;
-  }
-}
-
-// ============================================
-// DIALOG (shadcn-vue style) - Mobile Optimized
+// DIALOG (shadcn-vue Dialog exact)
+// Reference: shadcn-vue/dialog.vue
 // ============================================
 .q-dialog {
   &__backdrop {
-    background: rgba(0, 0, 0, 0.5);
-    backdrop-filter: blur(2px);
+    background-color: hsla(var(--background) / 0.8);
+    backdrop-filter: blur(4px);
   }
 
   &__inner {
     padding: 1rem;
 
     > div {
-      border-radius: $card-border-radius;
-      box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1);
+      border-radius: calc(var(--radius) + 2px);
+      border: 1px solid hsl(var(--border));
+      background-color: hsl(var(--background));
+      box-shadow: 0 25px 50px -12px rgb(0 0 0 / 0.25);
       max-width: calc(100vw - 2rem);
       width: 100%;
+      padding: 1.5rem;
+      gap: 1rem;
+      display: flex;
+      flex-direction: column;
     }
   }
 }
 
 // ============================================
-// TABLE (shadcn-vue style) - Mobile Optimized
+// TABLE (shadcn-vue Table exact)
+// Reference: shadcn-vue/table.vue
 // ============================================
 .q-table {
-  border-radius: $card-border-radius;
-  border: 1px solid $border;
-  box-shadow: 0 1px 2px 0 rgba(0, 0, 0, 0.05);
+  border-radius: calc(var(--radius) + 2px);
+  border: 1px solid hsl(var(--border));
+  background-color: hsl(var(--card));
+  box-shadow:
+    0 1px 3px 0 rgb(0 0 0 / 0.1),
+    0 1px 2px -1px rgb(0 0 0 / 0.1);
 
   &__top,
   &__bottom {
     background-color: transparent;
-    padding: 0.75rem;
-    border-bottom: 1px solid $border;
+    padding: 1rem;
+    border-bottom: 1px solid hsl(var(--border));
   }
 
   &__bottom {
     border-bottom: none;
-    border-top: 1px solid $border;
+    border-top: 1px solid hsl(var(--border));
   }
 
   &__container {
@@ -739,153 +766,201 @@ body {
   }
 
   thead tr {
-    border-bottom: 1px solid $border;
+    border-bottom: 1px solid hsl(var(--border));
+    background-color: hsl(var(--muted) / 0.5);
   }
 
   tbody td {
-    border-color: $border;
+    border-color: hsl(var(--border));
   }
 
   th {
-    font-weight: 600;
-    color: $text-primary;
-    background-color: transparent;
-    font-size: 0.6875rem;
-    text-transform: uppercase;
-    letter-spacing: 0.05em;
+    height: 3rem;
     padding: 0.75rem;
+    text-align: left;
+    align-content: center;
+    font-size: 0.75rem;
+    font-weight: 500;
+    color: hsl(var(--muted-foreground));
+    background-color: transparent;
+    text-transform: capitalize;
+    letter-spacing: 0;
   }
 
   td {
-    padding: 0.75rem;
+    padding: 1rem 0.75rem;
     font-size: 0.875rem;
-    color: $text-primary;
+    color: hsl(var(--foreground));
+    align-content: center;
   }
 
   tbody tr {
-    transition: all 0.15s cubic-bezier(0.4, 0, 0.2, 1);
+    border-bottom: 1px solid hsl(var(--border));
+    transition: all 150ms cubic-bezier(0.4, 0, 0.2, 1);
 
     &:hover {
-      background-color: $surface;
+      background-color: hsl(var(--muted) / 0.5);
+    }
+
+    &:last-child {
+      border-bottom: none;
     }
   }
 
   &--dense {
     th,
     td {
-      padding: 0.5rem;
+      padding: 0.5rem 0.75rem;
+    }
+
+    th {
+      height: 2rem;
     }
   }
 }
 
 // ============================================
-// TABS (shadcn-vue style) - Mobile Optimized
+// TABS (shadcn-vue Tabs exact)
+// Reference: shadcn-vue/tabs.vue
 // ============================================
 .q-tabs {
   &__content {
-    border-bottom: 1px solid $border;
+    border-bottom: 1px solid hsl(var(--border));
+    background-color: transparent;
   }
 }
 
 .q-tab {
-  text-transform: none;
-  font-weight: 500;
-  color: $text-muted;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  white-space: nowrap;
+  border-radius: calc(var(--radius));
   font-size: 0.875rem;
-  padding: 0.625rem 1rem;
-  min-height: 3rem;
+  font-weight: 500;
+  color: hsl(var(--muted-foreground));
+  padding: 0.375rem 0.75rem;
+  min-height: 2.25rem;
+  text-transform: none;
   letter-spacing: normal;
-  transition: all 0.15s cubic-bezier(0.4, 0, 0.2, 1);
+  transition: all 150ms cubic-bezier(0.4, 0, 0.2, 1);
 
   &:hover {
-    color: $text-primary;
-    background-color: $surface;
+    color: hsl(var(--foreground));
   }
 
   &--active {
-    color: $text-primary;
-    font-weight: 600;
+    color: hsl(var(--foreground));
+    background-color: hsl(var(--background));
+    box-shadow:
+      0 1px 3px 0 rgb(0 0 0 / 0.1),
+      0 1px 2px -1px rgb(0 0 0 / 0.1);
   }
 
   &__indicator {
     height: 2px;
-    background-color: $primary;
+    background-color: hsl(var(--primary));
   }
 
   &__icon {
-    font-size: 1.375rem;
+    font-size: 1rem;
+    margin-right: 0.5rem;
   }
 
   &__label {
-    line-height: 1.4;
+    line-height: 1.25rem;
   }
 }
 
 // ============================================
-// TOOLTIP (shadcn-vue style)
+// TOOLTIP (shadcn-vue Tooltip exact)
+// Reference: shadcn-vue/tooltip.vue
 // ============================================
 .q-tooltip {
-  border-radius: $button-border-radius;
-  background-color: $dark;
-  color: #ffffff;
-  font-size: 0.8125rem;
-  padding: 0.5rem 0.875rem;
-  box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+  border-radius: calc(var(--radius));
+  background-color: hsl(var(--primary));
+  color: hsl(var(--primary-foreground));
+  font-size: 0.75rem;
+  padding: 0.375rem 0.75rem;
+  line-height: 1rem;
+  box-shadow:
+    0 10px 15px -3px rgb(0 0 0 / 0.1),
+    0 4px 6px -4px rgb(0 0 0 / 0.1);
   max-width: calc(100vw - 2rem);
 }
 
 // ============================================
-// PROGRESS (shadcn-vue style)
+// PROGRESS (shadcn-vue Progress exact)
+// Reference: shadcn-vue/progress.vue
 // ============================================
 .q-linear-progress {
   border-radius: 9999px;
   height: 0.5rem;
+  overflow: hidden;
+  background-color: hsl(var(--secondary));
 
   &__track {
-    background-color: color.scale($border, $lightness: 30%);
+    background-color: hsl(var(--secondary));
     opacity: 1;
   }
 
   &__model {
-    background-color: $primary;
+    background-color: hsl(var(--primary));
+    transition: all 300ms cubic-bezier(0.4, 0, 0.2, 1);
   }
 }
 
 .q-circular-progress {
   &__svg {
     .q-circular-progress__track {
-      stroke: color.scale($border, $lightness: 30%);
-      opacity: 0.3;
+      stroke: hsl(var(--secondary));
+      opacity: 1;
+    }
+
+    .q-circular-progress__model {
+      stroke: hsl(var(--primary));
     }
   }
 }
 
 // ============================================
-// SEPARATOR (shadcn-vue style)
+// SEPARATOR (shadcn-vue Separator exact)
+// Reference: shadcn-vue/separator.vue
 // ============================================
 .q-separator {
-  background-color: $border;
+  background-color: hsl(var(--border));
   opacity: 1;
+  flex-shrink: 0;
+
+  &--horizontal {
+    height: 1px;
+    width: 100%;
+  }
+
+  &--vertical {
+    width: 1px;
+    height: 100%;
+  }
 }
 
 // ============================================
-// LIST (shadcn-vue style) - Mobile Optimized
+// LIST
 // ============================================
 .q-list {
-  border-radius: $card-border-radius;
-  border: 1px solid $border;
-  padding: 0.375rem;
+  border-radius: calc(var(--radius) + 2px);
+  border: 1px solid hsl(var(--border));
+  background-color: hsl(var(--card));
+  padding: 0.25rem;
 
   &--bordered {
     .q-item {
       border-bottom: none;
-      margin: 0.125rem 0;
     }
   }
 
   &--separator {
     > .q-item-type + .q-item-type {
-      border-top: 1px solid $border;
+      border-top: 1px solid hsl(var(--border));
       margin-top: 0.25rem;
       padding-top: 0.5rem;
     }
@@ -893,27 +968,32 @@ body {
 
   &--dense {
     .q-item {
-      padding: 0.5rem 0.75rem;
-      min-height: 2.25rem;
+      padding: 0.25rem 0.5rem;
+      min-height: 2rem;
     }
   }
 }
 
 // ============================================
-// EXPANSION ITEM (shadcn-vue Accordion style)
+// ACCORDION (shadcn-vue Accordion exact)
+// Reference: shadcn-vue/accordion.vue
 // ============================================
 .q-expansion-item {
-  border-radius: $button-border-radius;
-  border: 1px solid $border;
-  margin-bottom: 0.5rem;
+  border-bottom: 1px solid hsl(var(--border));
+  margin: 0;
+
+  &:last-child {
+    border-bottom: none;
+  }
 
   &__container {
-    border-radius: $button-border-radius;
-    overflow: hidden;
+    border-radius: 0;
+    overflow: visible;
   }
 
   &__toggle-icon {
-    transition: transform 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+    transition: transform 200ms cubic-bezier(0.4, 0, 0.2, 1);
+    color: hsl(var(--muted-foreground));
   }
 
   &--expanded {
@@ -924,207 +1004,179 @@ body {
 
   .q-item {
     border: none;
-    padding: 1rem;
+    border-radius: 0;
+    padding: 1rem 0;
+    font-size: 0.875rem;
     font-weight: 500;
-    min-height: 3rem;
+    color: hsl(var(--foreground));
+    min-height: auto;
+    transition: all 150ms cubic-bezier(0.4, 0, 0.2, 1);
 
     &:hover {
-      background-color: $surface;
+      background-color: transparent;
+      text-decoration: underline;
+    }
+
+    &:focus {
+      outline: none;
+      text-decoration: underline;
     }
   }
 
   &__content {
-    padding: 0 1rem 1rem;
-    color: $text-secondary;
+    padding: 0 0 1rem;
     font-size: 0.875rem;
+    color: hsl(var(--muted-foreground));
+    line-height: 1.5;
   }
 }
 
 // ============================================
-// AVATAR (shadcn-vue style)
+// AVATAR (shadcn-vue Avatar exact)
+// Reference: shadcn-vue/avatar.vue
 // ============================================
 .q-avatar {
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
   border-radius: 9999px;
   overflow: hidden;
-  background-color: $surface;
-  color: $text-primary;
+  background-color: hsl(var(--muted));
+  color: hsl(var(--muted-foreground));
   font-weight: 500;
 
   &__content {
+    display: flex;
+    align-items: center;
+    justify-content: center;
     font-size: 0.875rem;
   }
 }
 
 // ============================================
-// BREADCRUMBS (shadcn-vue style)
-// ============================================
-.q-breadcrumbs {
-  font-size: 0.875rem;
-  color: $text-muted;
-
-  &__el {
-    color: $text-muted;
-
-    &:hover {
-      color: $text-primary;
-    }
-  }
-
-  &__el--link {
-    transition: color 0.15s cubic-bezier(0.4, 0, 0.2, 1);
-  }
-
-  &__separator {
-    color: $text-muted;
-    margin: 0 0.25rem;
-  }
-}
-
-// ============================================
-// PAGINATION (shadcn-vue style) - Mobile Optimized
-// ============================================
-.q-pagination {
-  &__content {
-    gap: 0.25rem;
-  }
-
-  .q-btn {
-    min-width: 2.5rem;
-    min-height: 2.5rem;
-    padding: 0.5rem;
-    font-size: 0.875rem;
-    border: 1px solid $border;
-    background-color: $background;
-    color: $text-primary;
-
-    &:hover {
-      background-color: $surface;
-      border-color: color.scale($border, $lightness: -10%);
-    }
-
-    &.q-btn--flat {
-      border: none;
-    }
-  }
-
-  &__middle {
-    .q-btn {
-      &.q-btn--flat {
-        background-color: $primary;
-        color: white;
-        border: 1px solid $primary;
-
-        &:hover {
-          background-color: color.scale($primary, $lightness: -10%);
-        }
-      }
-    }
-  }
-}
-
-// ============================================
-// SLIDER (shadcn-vue style) - Mobile Optimized
+// SLIDER (shadcn-vue Slider exact)
+// Reference: shadcn-vue/slider.vue
 // ============================================
 .q-slider {
+  position: relative;
+  display: flex;
+  align-items: center;
+  width: 100%;
   padding: 1rem 0;
+  cursor: pointer;
 
   &__track-container {
-    border-radius: 9999px;
+    position: relative;
     height: 0.5rem;
+    width: 100%;
+    flex-grow: 1;
+    border-radius: 9999px;
+    overflow: hidden;
+    background-color: hsl(var(--secondary));
   }
 
   &__track {
-    background-color: color.scale($border, $lightness: 30%);
+    position: absolute;
+    height: 100%;
+    background-color: hsl(var(--secondary));
     border-radius: 9999px;
   }
 
   &__track-markers {
-    background-color: $primary;
+    position: absolute;
+    height: 100%;
+    background-color: hsl(var(--primary));
     border-radius: 9999px;
   }
 
   &__thumb {
-    width: 1.5rem;
-    height: 1.5rem;
-    background-color: $background;
-    border: 2px solid $primary;
-    box-shadow: 0 2px 4px 0 rgba(0, 0, 0, 0.2);
+    display: block;
+    width: 1.25rem;
+    height: 1.25rem;
+    background-color: hsl(var(--background));
+    border: 2px solid hsl(var(--primary));
+    border-radius: 9999px;
+    box-shadow: 0 2px 4px 0 rgb(0 0 0 / 0.2);
+    transition: all 150ms cubic-bezier(0.4, 0, 0.2, 1);
+    cursor: grab;
+
+    &:focus {
+      outline: none;
+      box-shadow:
+        0 0 0 2px hsl(var(--background)),
+        0 0 0 4px hsl(var(--ring));
+    }
+
+    &:active {
+      cursor: grabbing;
+    }
   }
 
   &__pin {
-    background-color: $primary;
-    border-radius: $button-border-radius;
+    background-color: hsl(var(--primary));
+    color: hsl(var(--primary-foreground));
+    border-radius: calc(var(--radius));
     font-size: 0.75rem;
     padding: 0.25rem 0.5rem;
   }
 }
 
 // ============================================
-// RATING (shadcn-vue style) - Mobile Optimized
-// ============================================
-.q-rating {
-  &__icon {
-    font-size: 1.75rem;
-    transition: all 0.15s cubic-bezier(0.4, 0, 0.2, 1);
-
-    &:active {
-      transform: scale(0.95);
-    }
-
-    & + .q-rating__icon {
-      margin-left: 0.375rem;
-    }
-  }
-}
-
-// ============================================
-// STEPPER (shadcn-vue style) - Mobile Optimized
+// STEPPER
 // ============================================
 .q-stepper {
-  border-radius: $card-border-radius;
-  border: 1px solid $border;
-  box-shadow: 0 1px 2px 0 rgba(0, 0, 0, 0.05);
+  border-radius: calc(var(--radius) + 2px);
+  border: 1px solid hsl(var(--border));
+  background-color: hsl(var(--card));
+  box-shadow:
+    0 1px 3px 0 rgb(0 0 0 / 0.1),
+    0 1px 2px -1px rgb(0 0 0 / 0.1);
 
   &__header {
-    border-bottom: 1px solid $border;
+    border-bottom: 1px solid hsl(var(--border));
     overflow-x: auto;
     -webkit-overflow-scrolling: touch;
   }
 
   &__tab {
     font-size: 0.875rem;
-    color: $text-muted;
+    color: hsl(var(--muted-foreground));
     padding: 1rem 0.75rem;
     min-width: 0;
+    transition: color 150ms cubic-bezier(0.4, 0, 0.2, 1);
 
     &--active {
-      color: $primary;
+      color: hsl(var(--primary));
     }
 
     &--done {
-      color: $positive;
+      color: hsl(var(--foreground));
     }
   }
 
   &__dot {
     width: 2rem;
     height: 2rem;
-    border: 2px solid $border;
-    background-color: $background;
-    color: $text-muted;
+    border: 2px solid hsl(var(--border));
+    background-color: hsl(var(--background));
+    color: hsl(var(--muted-foreground));
     font-weight: 600;
     font-size: 0.875rem;
+    border-radius: 9999px;
+    transition: all 150ms cubic-bezier(0.4, 0, 0.2, 1);
 
     &--active {
-      border-color: $primary;
-      background-color: $primary;
-      color: white;
+      border-color: hsl(var(--primary));
+      background-color: hsl(var(--primary));
+      color: hsl(var(--primary-foreground));
     }
 
     &--done {
-      border-color: $positive;
-      background-color: $positive;
-      color: white;
+      border-color: hsl(var(--primary));
+      background-color: hsl(var(--primary));
+      color: hsl(var(--primary-foreground));
     }
   }
 
@@ -1134,97 +1186,60 @@ body {
 }
 
 // ============================================
-// BANNER (shadcn-vue Alert style) - Mobile Optimized
+// ALERT (shadcn-vue Alert exact)
+// Reference: shadcn-vue/alert.vue
 // ============================================
 .q-banner {
-  border-radius: $card-border-radius;
-  border: 1px solid $border;
-  background-color: $background;
+  position: relative;
+  width: 100%;
+  border-radius: calc(var(--radius) + 2px);
+  border: 1px solid hsl(var(--border));
+  background-color: hsl(var(--background));
   padding: 1rem;
   font-size: 0.875rem;
+  line-height: 1.25rem;
 
   &__avatar {
-    min-width: 1.5rem;
+    min-width: 1rem;
     padding-right: 0.75rem;
+    color: hsl(var(--foreground));
   }
 
   &__content {
-    color: $text-primary;
+    color: hsl(var(--foreground));
     line-height: 1.5;
   }
 
   &--dense {
-    padding: 0.75rem;
+    padding: 0.75rem 1rem;
   }
 }
 
 // ============================================
-// TIMELINE (shadcn-vue style)
-// ============================================
-.q-timeline {
-  &__entry {
-    padding-bottom: 1.5rem;
-  }
-
-  &__dot {
-    width: 0.75rem;
-    height: 0.75rem;
-    border: 2px solid $border;
-    background-color: $background;
-
-    &--icon {
-      width: 2rem;
-      height: 2rem;
-      border-radius: 9999px;
-      background-color: $primary;
-      color: white;
-      font-size: 1rem;
-    }
-  }
-
-  &__content {
-    padding-bottom: 0;
-  }
-
-  &__title {
-    font-weight: 600;
-    color: $text-primary;
-    font-size: 0.9375rem;
-    margin-bottom: 0.25rem;
-  }
-
-  &__subtitle {
-    color: $text-muted;
-    font-size: 0.8125rem;
-    margin-bottom: 0.5rem;
-  }
-}
-
-// ============================================
-// SCROLLBAR (shadcn-vue style)
+// SCROLLBAR
 // ============================================
 ::-webkit-scrollbar {
-  width: 8px;
-  height: 8px;
+  width: 10px;
+  height: 10px;
 }
 
 ::-webkit-scrollbar-track {
-  background: $surface;
-  border-radius: 4px;
+  background: hsl(var(--muted));
+  border-radius: calc(var(--radius));
 }
 
 ::-webkit-scrollbar-thumb {
-  background: $border;
-  border-radius: 4px;
-  transition: background 0.15s cubic-bezier(0.4, 0, 0.2, 1);
+  background: hsl(var(--border));
+  border-radius: calc(var(--radius));
+  transition: background 150ms cubic-bezier(0.4, 0, 0.2, 1);
 
   &:hover {
-    background: color.scale($border, $lightness: -15%);
+    background: hsl(var(--muted-foreground));
   }
 }
 
 // ============================================
-// UTILITY CLASSES (shadcn-vue inspired)
+// TYPOGRAPHY
 // ============================================
 .text-h1,
 .text-h2,
@@ -1234,30 +1249,42 @@ body {
 .text-h6 {
   font-weight: 600;
   line-height: 1.2;
-  color: $text-primary;
+  color: hsl(var(--foreground));
+  letter-spacing: -0.02em;
 }
 
 .text-body1,
 .text-body2 {
-  color: $text-primary;
+  color: hsl(var(--foreground));
   line-height: 1.5;
 }
 
-.text-caption,
+.text-caption {
+  color: hsl(var(--muted-foreground));
+  font-size: 0.75rem;
+  line-height: 1rem;
+}
+
 .text-overline {
-  color: $text-muted;
+  color: hsl(var(--muted-foreground));
+  font-size: 0.75rem;
+  line-height: 1rem;
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
 }
 
 // ============================================
-// MOBILE SPECIFIC FIXES
+// MOBILE OPTIMIZATIONS
 // ============================================
 @media (max-width: 600px) {
-  .q-card__section {
-    padding: 0.875rem;
+  .q-card {
+    padding: 1rem;
+    gap: 1rem;
   }
 
   .q-dialog__inner > div {
     margin: 0.5rem;
+    padding: 1rem;
   }
 
   .q-table {
@@ -1267,24 +1294,32 @@ body {
     td {
       padding: 0.5rem;
     }
+
+    th {
+      height: 2rem;
+    }
   }
 
   .q-btn {
     min-height: 2.75rem;
+    height: 2.75rem;
   }
 
   .q-field__control {
     min-height: 2.75rem;
+    height: 2.75rem;
   }
 }
 
 // ============================================
-// FIX TOUCH TARGETS (WCAG 2.5.5)
+// TOUCH TARGETS (WCAG 2.5.5)
 // ============================================
-.q-btn,
-.q-checkbox__inner,
-.q-radio__inner,
-.q-toggle__inner {
-  min-width: 44px;
-  min-height: 44px;
+@media (max-width: 1024px) {
+  .q-btn,
+  .q-checkbox__inner,
+  .q-radio__inner,
+  .q-toggle__inner {
+    min-width: 44px;
+    min-height: 44px;
+  }
 }

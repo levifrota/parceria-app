@@ -32,6 +32,12 @@ service cloud.firestore {
       allow write: if false; // Apenas via console ou backend
     }
 
+    // Permitir gerenciamento de URLs de imagens (ImgBB)
+    match /images/{document=**} {
+      allow read: if true;
+      allow write: if false; // Apenas via console ou backend
+    }
+
     // Adicione outras coleções conforme necessário
   }
 }
@@ -41,9 +47,10 @@ service cloud.firestore {
 
 ## 📝 Explicação das Regras
 
-- `allow read: if true` - Permite que qualquer pessoa leia os conteúdos
+- `allow read: if true` - Permite que qualquer pessoa leia os conteúdos e imagens
 - `allow write: if false` - Impede que usuários escrevam diretamente no banco
 - Você só poderá adicionar/editar conteúdos via Firebase Console
+- **Imagens**: As imagens são armazenadas no ImgBB (externo), apenas as URLs ficam salvas no Firestore
 
 ## 🔒 Regras de Produção (Recomendado depois)
 
@@ -54,6 +61,11 @@ rules_version = '2';
 service cloud.firestore {
   match /databases/{database}/documents {
     match /contents/{document=**} {
+      allow read: if true;
+      allow write: if request.auth != null; // Apenas usuários autenticados
+    }
+
+    match /images/{document=**} {
       allow read: if true;
       allow write: if request.auth != null; // Apenas usuários autenticados
     }
