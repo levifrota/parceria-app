@@ -38,31 +38,15 @@
         </q-card-section>
 
         <q-card-section v-else-if="content.type === 'video'">
-          <div class="video-container">
-            <q-icon name="play_circle_outline" size="64px" color="red" />
-            <div class="text-subtitle1 q-mt-md">Vídeo</div>
-            <q-btn
-              color="primary"
-              label="Assistir Vídeo"
-              class="q-mt-md"
-              :href="content.url"
-              target="_blank"
-            />
-          </div>
+          <VideoPlayer :src="content.url" />
         </q-card-section>
 
         <q-card-section v-else-if="content.type === 'podcast'">
-          <div class="video-container">
-            <q-icon name="headphones" size="64px" color="purple" />
-            <div class="text-subtitle1 q-mt-md">Podcast</div>
-            <q-btn
-              color="primary"
-              label="Ouvir Podcast"
-              class="q-mt-md"
-              :href="content.url"
-              target="_blank"
-            />
-          </div>
+          <AudioPlayer :src="content.url">
+            <template #title>
+              <span class="audio-player-title">{{ content.title }}</span>
+            </template>
+          </AudioPlayer>
         </q-card-section>
       </q-card>
     </div>
@@ -80,6 +64,8 @@ import { ref, computed, onMounted } from 'vue'
 import { useRoute } from 'vue-router'
 import { useContentStore } from 'src/stores/content'
 import { usePregnancyStore } from 'src/stores/pregnancy'
+import VideoPlayer from 'src/components/VideoPlayer.vue'
+import AudioPlayer from 'src/components/AudioPlayer.vue'
 
 const route = useRoute()
 const contentStore = useContentStore()
@@ -111,12 +97,5 @@ onMounted(async () => {
 .content-detail {
   max-width: 800px;
   margin: 0 auto;
-}
-
-.video-container {
-  text-align: center;
-  padding: 40px;
-  background: #f5f5f5;
-  border-radius: 8px;
 }
 </style>
