@@ -6,67 +6,71 @@
 
 // CSS Variables (formato HSL como shadcn-vue)
 :root {
-  // Base colors - Zinc theme (shadcn-vue default)
-  --background: 0 0% 100%;
-  --foreground: 240 10% 3.9%;
+  // Paleta baseada nas cores do ícone do app
+  // #F6EEDF = 38 67% 92% (Creme)
+  // #96B3B8 = 188 16% 65% (Azul-acinzentado)
+  // #CBDAC7 = 110 17% 82% (Verde-sálvia)
+
+  --background: 38 40% 97%; // Quase branco com toque de creme
+  --foreground: 200 20% 18%; // Azul escuro quase preto
 
   --card: 0 0% 100%;
-  --card-foreground: 240 10% 3.9%;
+  --card-foreground: 200 20% 18%;
 
   --popover: 0 0% 100%;
-  --popover-foreground: 240 10% 3.9%;
+  --popover-foreground: 200 20% 18%;
 
-  --primary: 265 99% 56%;
-  --primary-foreground: 0 0% 98%;
+  --primary: 188 28% 48%; // Azul-acinzentado mais saturado (#96B3B8 escurecido)
+  --primary-foreground: 0 0% 100%;
 
-  --secondary: 240 4.8% 95.9%;
-  --secondary-foreground: 240 5.9% 10%;
+  --secondary: 110 17% 88%; // Verde-sálvia bem claro
+  --secondary-foreground: 110 15% 28%;
 
-  --muted: 240 4.8% 95.9%;
-  --muted-foreground: 240 3.8% 46.1%;
+  --muted: 38 30% 93%; // Creme bem claro
+  --muted-foreground: 200 12% 48%;
 
-  --accent: 240 4.8% 95.9%;
-  --accent-foreground: 240 5.9% 10%;
+  --accent: 110 17% 85%; // Verde-sálvia suave
+  --accent-foreground: 110 18% 25%;
 
-  --destructive: 0 84.2% 60.2%;
+  --destructive: 0 65% 55%;
   --destructive-foreground: 0 0% 98%;
 
-  --border: 240 5.9% 90%;
-  --input: 240 5.9% 90%;
-  --ring: 265 99% 56%;
+  --border: 188 18% 85%; // Azul-acinzentado bem claro
+  --input: 188 18% 85%;
+  --ring: 188 28% 48%; // Mesmo que primary
 
-  --radius: 0.5rem;
+  --radius: 0.625rem;
 }
 
 // Dark theme
 body.body--dark {
-  --background: 240 10% 3.9%;
-  --foreground: 0 0% 98%;
+  --background: 200 22% 12%; // Azul-escuro profundo
+  --foreground: 38 40% 92%; // Creme claro
 
-  --card: 240 10% 3.9%;
-  --card-foreground: 0 0% 98%;
+  --card: 200 20% 15%;
+  --card-foreground: 38 40% 92%;
 
-  --popover: 240 10% 3.9%;
-  --popover-foreground: 0 0% 98%;
+  --popover: 200 20% 15%;
+  --popover-foreground: 38 40% 92%;
 
-  --primary: 265 99% 56%;
-  --primary-foreground: 0 0% 98%;
+  --primary: 188 28% 55%; // Azul-acinzentado mais claro no dark
+  --primary-foreground: 200 22% 10%;
 
-  --secondary: 240 3.7% 15.9%;
-  --secondary-foreground: 0 0% 98%;
+  --secondary: 200 18% 22%;
+  --secondary-foreground: 38 30% 88%;
 
-  --muted: 240 3.7% 15.9%;
-  --muted-foreground: 240 5% 64.9%;
+  --muted: 200 18% 20%;
+  --muted-foreground: 188 14% 58%;
 
-  --accent: 240 3.7% 15.9%;
-  --accent-foreground: 0 0% 98%;
+  --accent: 110 14% 24%; // Verde-sálvia escuro
+  --accent-foreground: 110 15% 82%;
 
-  --destructive: 0 62.8% 30.6%;
+  --destructive: 0 55% 40%;
   --destructive-foreground: 0 0% 98%;
 
-  --border: 240 3.7% 15.9%;
-  --input: 240 3.7% 15.9%;
-  --ring: 265 99% 56%;
+  --border: 200 18% 22%;
+  --input: 200 18% 22%;
+  --ring: 188 28% 55%;
 }
 
 // SCSS Variables (conversão de CSS vars para uso em SCSS)
@@ -99,10 +103,10 @@ $input: hsl(var(--input));
 $ring: hsl(var(--ring));
 
 // Quasar compatibility
-$positive: #22c55e;
+$positive: #5a9e7a;
 $negative: $destructive;
-$info: #3b82f6;
-$warning: #f59e0b;
+$info: #6a9faa;
+$warning: #c9935a;
 $dark: hsl(var(--background));
 $dark-page: hsl(var(--card));
 

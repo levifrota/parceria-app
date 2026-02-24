@@ -13,9 +13,6 @@ class DatabaseService {
     if (this.initialized) return
 
     try {
-      console.log('🗄️ Inicializando database...')
-      console.log('📱 Plataforma:', Capacitor.getPlatform())
-
       if (Capacitor.isNativePlatform()) {
         // Tentar usar SQLite nativo
         try {

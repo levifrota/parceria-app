@@ -1,20 +1,24 @@
 <template>
   <q-page padding>
     <!-- Adicionar no topo da página, temporário -->
-    <q-btn
-      flat
-      dense
-      icon="admin_panel_settings"
-      color="grey"
-      size="sm"
-      @click="$router.push('/admin/contents')"
-      class="absolute-top-right q-ma-sm"
-    />
+    <div class="" v-if="FALSE">
+      <q-btn
+        flat
+        dense
+        icon="admin_panel_settings"
+        color="grey"
+        size="sm"
+        @click="$router.push('/admin/contents')"
+        class="absolute-top-right q-ma-sm"
+      />
+    </div>
     <div class="page-header q-mb-lg">
       <h1 class="text-h4 text-weight-bold text-primary">
         {{ greeting }}
       </h1>
-      <p class="text-subtitle1 text-grey-7">Seu guia completo para o parto e pós-parto</p>
+      <p class="text-subtitle1 text-grey-7">
+        Aqui você vai encontrar tudo sobre o parto e pós-parto
+      </p>
 
       <!-- Banner para completar perfil -->
       <q-banner v-if="!isProfileComplete" rounded class="bg-orange-2 q-mt-md">
@@ -93,7 +97,7 @@ const isProfileComplete = computed(() => pregnancyStore.isProfileComplete)
 const greeting = computed(() => {
   const profile = pregnancyStore.familyProfile
   if (profile.parent1Name) {
-    return `${pregnancyStore.greetingMessage}, ${profile.parent1Name}!`
+    return `Olá, ${pregnancyStore.greetingMessage}!`
   }
   return 'Parceria ao Lado'
 })
@@ -137,6 +141,6 @@ const navigateTo = (path) => {
 
 .contractions-bg {
   height: 180px;
-  background: linear-gradient(135deg, #c62828, #e53935);
+  background: linear-gradient(135deg, #2e7d32, #43a047);
 }
 </style>

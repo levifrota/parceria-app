@@ -55,6 +55,15 @@
 
         <q-separator />
 
+        <q-item clickable to="/about">
+          <q-item-section avatar>
+            <q-icon name="info" />
+          </q-item-section>
+          <q-item-section>
+            <q-item-label>Sobre o Projeto</q-item-label>
+          </q-item-section>
+        </q-item>
+
         <q-item clickable to="/profile">
           <q-item-section avatar>
             <q-icon name="settings" />

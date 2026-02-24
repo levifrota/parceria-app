@@ -5,6 +5,7 @@ import {
   addDoc,
   updateDoc,
   deleteDoc,
+  getDocs,
   doc,
   serverTimestamp,
 } from 'firebase/firestore'
@@ -90,6 +91,58 @@ class FirebaseAdminService {
       console.log('✅ Conteúdo deletado:', contentId)
     } catch (error) {
       console.error('❌ Erro ao deletar conteúdo:', error)
+      throw error
+    }
+  }
+
+  // ===== GERENCIAMENTO DE IMAGENS =====
+
+  /**
+   * Salvar imagem em base64 no Firestore
+   * @param {Object} param0 - { base64, name, description }
+   * @returns {Promise<Object>} Dados da imagem salva
+   */
+  async saveImageBase64({ base64, name, description }) {
+    try {
+      const docRef = await addDoc(collection(this.db, 'images'), {
+        url: base64,
+        name: name || 'Imagem',
+        description: description || '',
+        createdAt: serverTimestamp(),
+      })
+
+      console.log('✅ Imagem salva com ID:', docRef.id)
+      return { id: docRef.id, url: base64, name: name || 'Imagem', description: description || '' }
+    } catch (error) {
+      console.error('❌ Erro ao salvar imagem:', error)
+      throw error
+    }
+  }
+
+  /**
+   * Buscar todas as imagens da galeria
+   * @returns {Promise<Array>} Lista de imagens
+   */
+  async getAllImages() {
+    try {
+      const snapshot = await getDocs(collection(this.db, 'images'))
+      return snapshot.docs.map((d) => ({ id: d.id, ...d.data() }))
+    } catch (error) {
+      console.error('❌ Erro ao carregar imagens:', error)
+      throw error
+    }
+  }
+
+  /**
+   * Deletar uma imagem da galeria
+   * @param {string} imageId - ID da imagem
+   */
+  async deleteImage(imageId) {
+    try {
+      await deleteDoc(doc(this.db, 'images', imageId))
+      console.log('✅ Imagem deletada:', imageId)
+    } catch (error) {
+      console.error('❌ Erro ao deletar imagem:', error)
       throw error
     }
   }

@@ -34,7 +34,7 @@
         <q-separator />
 
         <q-card-section v-if="content.type === 'article'">
-          <div class="text-body1" v-html="content.content"></div>
+          <div class="text-body1" v-html="personalizedContent"></div>
         </q-card-section>
 
         <q-card-section v-else-if="content.type === 'video'">
@@ -76,6 +76,15 @@ const loading = ref(true)
 
 const contentId = computed(() => route.params.id)
 const isFavorite = computed(() => pregnancyStore.isFavorite(contentId.value))
+
+const personalizedContent = computed(() => {
+  if (!content.value?.content) return ''
+  const { babyName, parent1Name, parent2Name } = pregnancyStore.familyProfile
+  return content.value.content
+    .replace(/\{\{gestante\}\}/gi, parent2Name || 'você')
+    .replace(/\{\{parceria\}\}/gi, parent1Name || 'sua parceria')
+    .replace(/\{\{bebê\}\}/gi, babyName || 'seu bebê')
+})
 
 const toggleFavorite = async () => {
   await pregnancyStore.toggleFavoriteAndSave(contentId.value)

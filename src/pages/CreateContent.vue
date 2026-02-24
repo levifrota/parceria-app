@@ -308,55 +308,60 @@
             active-color="primary"
             indicator-color="primary"
           >
-            <q-tab name="url" label="Inserir URL" icon="link" />
+            <q-tab name="upload" label="Upload de Imagem" icon="upload" />
             <q-tab name="gallery" label="Galeria" icon="collections" />
           </q-tabs>
 
           <q-separator />
 
           <q-tab-panels v-model="imageTab" animated>
-            <!-- Aba de Inserir URL -->
-            <q-tab-panel name="url">
+            <!-- Aba de Upload de Imagem -->
+            <q-tab-panel name="upload">
               <div class="q-gutter-md">
-                <q-input
-                  v-model="imageUrl"
-                  label="URL da Imagem (ImgBB)"
-                  outlined
-                  placeholder="https://i.ibb.co/..."
-                  hint="Cole aqui a URL da imagem já enviada no ImgBB"
-                  @update:model-value="loadImagePreview"
-                >
-                  <template v-slot:prepend>
-                    <q-icon name="link" />
-                  </template>
-                </q-input>
-
-                <q-input
-                  v-model="imageName"
-                  label="Nome (opcional)"
-                  outlined
-                  placeholder="Ex: Logo parceria"
+                <!-- Input de arquivo oculto -->
+                <input
+                  ref="fileInput"
+                  type="file"
+                  accept="image/*"
+                  class="hidden-input"
+                  @change="handleImageUpload"
                 />
+
+                <!-- Área de upload -->
+                <div class="upload-area q-pa-lg text-center" @click="fileInput?.click()">
+                  <div v-if="!imagePreview">
+                    <q-icon name="cloud_upload" size="3em" color="grey-5" />
+                    <div class="q-mt-sm text-grey-6">Clique para selecionar uma imagem</div>
+                    <div class="text-caption text-grey-5">JPG, PNG, WebP — máx. 5MB</div>
+                  </div>
+                  <img
+                    v-else
+                    :src="imagePreview"
+                    style="max-width: 100%; max-height: 250px; border-radius: 8px"
+                    class="shadow-2"
+                  />
+                </div>
+
+                <div v-if="imagePreview" class="row justify-center">
+                  <q-btn
+                    flat
+                    dense
+                    color="grey"
+                    icon="refresh"
+                    label="Trocar imagem"
+                    @click="fileInput?.click()"
+                  />
+                </div>
+
+                <q-input v-model="imageName" label="Nome (opcional)" outlined />
 
                 <q-input
                   v-model="imageDescription"
-                  label="Descrição (opcional)"
+                  label="Descrição / alt da imagem (opcional)"
                   outlined
                   type="textarea"
                   rows="2"
-                  placeholder="Descrição para alt da imagem"
                 />
-
-                <!-- Preview da imagem -->
-                <div v-if="imagePreview" class="q-mt-md">
-                  <div class="text-caption q-mb-xs">Preview:</div>
-                  <img
-                    :src="imagePreview"
-                    style="max-width: 100%; max-height: 300px; border-radius: 8px"
-                    class="shadow-2"
-                    @error="imagePreview = null"
-                  />
-                </div>
 
                 <!-- Botões -->
                 <div class="row q-gutter-sm q-mt-md">
@@ -364,8 +369,8 @@
                     label="Inserir no Artigo"
                     color="primary"
                     icon="add_photo_alternate"
-                    :disable="!imageUrl"
-                    @click="insertImageFromUrl"
+                    :disable="!imagePreview"
+                    @click="insertImageFromBase64"
                   />
                   <q-btn
                     label="Salvar na Galeria"
@@ -373,7 +378,7 @@
                     icon="save"
                     outline
                     :loading="saving"
-                    :disable="!imageUrl || saving"
+                    :disable="!imagePreview || saving"
                     @click="saveImageToGallery"
                   />
                   <q-btn label="Cancelar" flat @click="closeImageDialog" />
@@ -434,6 +439,7 @@ const contentStore = useContentStore()
 
 // Refs
 const contentTextarea = ref(null)
+const fileInput = ref(null)
 
 const form = ref({
   type: 'article',
@@ -455,8 +461,7 @@ const activeTab = ref('labor')
 
 // Estados do diálogo de imagens
 const imageDialog = ref(false)
-const imageTab = ref('url')
-const imageUrl = ref('')
+const imageTab = ref('upload')
 const imageName = ref('')
 const imageDescription = ref('')
 const imagePreview = ref(null)
@@ -642,11 +647,96 @@ const deleteContent = async (contentId) => {
 // ===== FUNÇÕES DE GERENCIAMENTO DE IMAGENS =====
 
 /**
+ * Comprimir imagem e converter para base64
+ */
+const compressImage = (file, maxWidth = 1200, maxHeight = 900, quality = 0.75) => {
+  return new Promise((resolve, reject) => {
+    const reader = new FileReader()
+    reader.onload = (e) => {
+      const img = new Image()
+      img.onload = () => {
+        const canvas = document.createElement('canvas')
+        let { width, height } = img
+
+        if (width > maxWidth) {
+          height = Math.round((height * maxWidth) / width)
+          width = maxWidth
+        }
+        if (height > maxHeight) {
+          width = Math.round((width * maxHeight) / height)
+          height = maxHeight
+        }
+
+        canvas.width = width
+        canvas.height = height
+        const ctx = canvas.getContext('2d')
+        ctx.drawImage(img, 0, 0, width, height)
+        resolve(canvas.toDataURL('image/jpeg', quality))
+      }
+      img.onerror = reject
+      img.src = e.target.result
+    }
+    reader.onerror = reject
+    reader.readAsDataURL(file)
+  })
+}
+
+/**
+ * Processar arquivo de imagem selecionado
+ */
+const handleImageUpload = async (event) => {
+  const file = event.target.files?.[0]
+  if (!file) return
+
+  if (!file.type.startsWith('image/')) {
+    $q.notify({
+      type: 'warning',
+      message: 'Por favor, selecione apenas arquivos de imagem.',
+      position: 'top',
+    })
+    return
+  }
+
+  if (file.size > 5 * 1024 * 1024) {
+    $q.notify({ type: 'warning', message: 'A imagem deve ter no máximo 5MB.', position: 'top' })
+    return
+  }
+
+  try {
+    const base64 = await compressImage(file)
+
+    // Firestore tem limite de ~1MB por campo
+    if (base64.length > 1048487) {
+      $q.notify({
+        type: 'warning',
+        message: 'A imagem é muito grande após compressão. Escolha uma imagem menor.',
+        position: 'top',
+      })
+      return
+    }
+
+    imagePreview.value = base64
+
+    // Auto-preencher nome com o nome do arquivo
+    if (!imageName.value) {
+      imageName.value = file.name.replace(/\.[^.]+$/, '')
+    }
+  } catch (error) {
+    console.error('Erro ao processar imagem:', error)
+    $q.notify({
+      type: 'negative',
+      message: 'Erro ao processar imagem. Tente novamente.',
+      position: 'top',
+    })
+  }
+}
+
+/**
  * Abrir diálogo de imagens
  */
 const openImageDialog = async () => {
   imageDialog.value = true
-  imageTab.value = 'url'
+  imageTab.value = 'upload'
   await loadImages()
 }
 
@@ -655,38 +745,20 @@ const openImageDialog = async () => {
  */
 const closeImageDialog = () => {
   imageDialog.value = false
-  imageUrl.value = ''
   imageName.value = ''
   imageDescription.value = ''
   imagePreview.value = null
+  if (fileInput.value) fileInput.value.value = ''
 }
 
 /**
- * Carregar preview da imagem pela URL
+ * Inserir imagem base64 diretamente no artigo
  */
-const loadImagePreview = (url) => {
-  if (url && (url.startsWith('http://') || url.startsWith('https://'))) {
-    imagePreview.value = url
-  } else {
-    imagePreview.value = null
-  }
-}
-
-/**
- * Inserir imagem diretamente pela URL
- */
-const insertImageFromUrl = () => {
-  if (!imageUrl.value) {
-    $q.notify({
-      type: 'warning',
-      message: 'Insira uma URL válida',
-      position: 'top',
-    })
-    return
-  }
+const insertImageFromBase64 = () => {
+  if (!imagePreview.value) return
 
   const alt = imageDescription.value || imageName.value || 'imagem'
-  insertImageTag(imageUrl.value, alt)
+  insertImageTag(imagePreview.value, alt)
 
   $q.notify({
     type: 'positive',
@@ -694,31 +766,23 @@ const insertImageFromUrl = () => {
     position: 'top',
   })
 
-  // Resetar campos
-  imageUrl.value = ''
-  imageName.value = ''
-  imageDescription.value = ''
-  imagePreview.value = null
+  closeImageDialog()
 }
 
 /**
- * Salvar URL da imagem na galeria
+ * Salvar imagem base64 na galeria do Firebase
  */
 const saveImageToGallery = async () => {
-  if (!imageUrl.value) {
-    $q.notify({
-      type: 'warning',
-      message: 'Insira uma URL válida',
-      position: 'top',
-    })
+  if (!imagePreview.value) {
+    $q.notify({ type: 'warning', message: 'Selecione uma imagem primeiro.', position: 'top' })
     return
   }
 
   saving.value = true
 
   try {
-    const imageData = await firebaseAdmin.saveImageUrl({
-      url: imageUrl.value,
+    const imageData = await firebaseAdmin.saveImageBase64({
+      base64: imagePreview.value,
       name: imageName.value || 'Imagem',
       description: imageDescription.value || '',
     })
@@ -729,14 +793,12 @@ const saveImageToGallery = async () => {
       position: 'top',
     })
 
-    // Adicionar à lista local
     images.value.unshift(imageData)
 
-    // Resetar campos
-    imageUrl.value = ''
+    imagePreview.value = null
     imageName.value = ''
     imageDescription.value = ''
-    imagePreview.value = null
+    if (fileInput.value) fileInput.value.value = ''
   } catch (error) {
     console.error('Erro ao salvar imagem:', error)
     $q.notify({
@@ -861,5 +923,24 @@ onMounted(async () => {
 .page-header {
   display: flex;
   align-items: center;
+}
+
+.hidden-input {
+  display: none;
+}
+
+.upload-area {
+  border: 2px dashed #ccc;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: border-color 0.2s;
+  min-height: 140px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.upload-area:hover {
+  border-color: var(--q-primary);
 }
 </style>
