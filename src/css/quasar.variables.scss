@@ -6,71 +6,71 @@
 
 // CSS Variables (formato HSL como shadcn-vue)
 :root {
-  // Paleta baseada nas cores do ícone do app
-  // #F6EEDF = 38 67% 92% (Creme)
-  // #96B3B8 = 188 16% 65% (Azul-acinzentado)
-  // #CBDAC7 = 110 17% 82% (Verde-sálvia)
+  // Paleta Turquesa + Pêssego
+  // #7ED4D6 = 181 52% 67% (Turquesa Bebê)
+  // #FFB787 = 24 100% 76% (Pêssego Claro)
+  // #FDF6E3 = 44 87% 94% (Creme)
 
-  --background: 38 40% 97%; // Quase branco com toque de creme
-  --foreground: 200 20% 18%; // Azul escuro quase preto
+  --background: 44 67% 95%; // Creme suave
+  --foreground: 181 40% 18%; // Teal escuro quase preto
 
   --card: 0 0% 100%;
-  --card-foreground: 200 20% 18%;
+  --card-foreground: 181 40% 18%;
 
   --popover: 0 0% 100%;
-  --popover-foreground: 200 20% 18%;
+  --popover-foreground: 181 40% 18%;
 
-  --primary: 188 28% 48%; // Azul-acinzentado mais saturado (#96B3B8 escurecido)
+  --primary: 181 48% 46%; // Turquesa escurecido para contraste
   --primary-foreground: 0 0% 100%;
 
-  --secondary: 110 17% 88%; // Verde-sálvia bem claro
-  --secondary-foreground: 110 15% 28%;
+  --secondary: 24 90% 88%; // Pêssego bem claro
+  --secondary-foreground: 24 55% 28%;
 
-  --muted: 38 30% 93%; // Creme bem claro
-  --muted-foreground: 200 12% 48%;
+  --muted: 44 50% 92%; // Creme claro
+  --muted-foreground: 181 18% 46%;
 
-  --accent: 110 17% 85%; // Verde-sálvia suave
-  --accent-foreground: 110 18% 25%;
+  --accent: 24 85% 82%; // Pêssego suave
+  --accent-foreground: 24 50% 24%;
 
   --destructive: 0 65% 55%;
   --destructive-foreground: 0 0% 98%;
 
-  --border: 188 18% 85%; // Azul-acinzentado bem claro
-  --input: 188 18% 85%;
-  --ring: 188 28% 48%; // Mesmo que primary
+  --border: 181 25% 86%; // Teal bem claro
+  --input: 181 25% 86%;
+  --ring: 181 48% 46%; // Mesmo que primary
 
   --radius: 0.625rem;
 }
 
 // Dark theme
 body.body--dark {
-  --background: 200 22% 12%; // Azul-escuro profundo
-  --foreground: 38 40% 92%; // Creme claro
+  --background: 181 28% 12%; // Teal escuro profundo
+  --foreground: 44 70% 90%; // Creme claro
 
-  --card: 200 20% 15%;
-  --card-foreground: 38 40% 92%;
+  --card: 181 24% 16%;
+  --card-foreground: 44 70% 90%;
 
-  --popover: 200 20% 15%;
-  --popover-foreground: 38 40% 92%;
+  --popover: 181 24% 16%;
+  --popover-foreground: 44 70% 90%;
 
-  --primary: 188 28% 55%; // Azul-acinzentado mais claro no dark
-  --primary-foreground: 200 22% 10%;
+  --primary: 181 48% 58%; // Turquesa mais claro no dark
+  --primary-foreground: 181 35% 12%;
 
-  --secondary: 200 18% 22%;
-  --secondary-foreground: 38 30% 88%;
+  --secondary: 181 20% 22%;
+  --secondary-foreground: 44 50% 85%;
 
-  --muted: 200 18% 20%;
-  --muted-foreground: 188 14% 58%;
+  --muted: 181 20% 20%;
+  --muted-foreground: 181 16% 56%;
 
-  --accent: 110 14% 24%; // Verde-sálvia escuro
-  --accent-foreground: 110 15% 82%;
+  --accent: 24 45% 28%; // Pêssego escuro
+  --accent-foreground: 24 80% 85%;
 
   --destructive: 0 55% 40%;
   --destructive-foreground: 0 0% 98%;
 
-  --border: 200 18% 22%;
-  --input: 200 18% 22%;
-  --ring: 188 28% 55%;
+  --border: 181 20% 22%;
+  --input: 181 20% 22%;
+  --ring: 181 48% 58%;
 }
 
 // SCSS Variables (conversão de CSS vars para uso em SCSS)
@@ -103,10 +103,10 @@ $input: hsl(var(--input));
 $ring: hsl(var(--ring));
 
 // Quasar compatibility
-$positive: #5a9e7a;
+$positive: #52a48a; // teal-verde
 $negative: $destructive;
-$info: #6a9faa;
-$warning: #c9935a;
+$info: #7ed4d6; // Turquesa Bebê
+$warning: #ffb787; // Pêssego Claro
 $dark: hsl(var(--background));
 $dark-page: hsl(var(--card));
 

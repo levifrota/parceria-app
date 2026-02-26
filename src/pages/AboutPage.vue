@@ -9,12 +9,14 @@
 
     <div class="q-pa-md">
       <!-- Hero Section -->
-      <div class="text-center q-py-xl">
-        <q-avatar size="100px" class="q-mb-md">
+      <div class="text-center q-py-xl flex column items-center">
+        <q-avatar size="100px" class="q-mb-md justify-center">
           <q-icon name="handshake" size="60px" color="primary" />
         </q-avatar>
         <h4 class="text-h4 text-weight-bold text-primary q-ma-none">Parceria ao Lado</h4>
-        <p class="text-subtitle1 text-grey-7 q-mt-sm">Conectando pessoas e oportunidades</p>
+        <p class="text-subtitle1 text-grey-7 q-mt-sm">
+          Tecnologia educacional para o cuidado no ciclo gravídico-puerperal
+        </p>
       </div>
 
       <q-separator class="q-my-md" />
@@ -27,10 +29,18 @@
             O que é o Parceria ao Lado?
           </div>
           <p class="text-body1 text-grey-8">
-            O <strong>Parceria ao Lado</strong> é uma plataforma mobile desenvolvida para facilitar
-            a conexão entre pessoas que buscam parcerias em projetos, negócios e iniciativas
-            colaborativas. Nossa missão é tornar a busca por parceiros mais simples, rápida e
-            eficiente.
+            O <strong>Parceria ao Lado</strong> é uma tecnologia educacional construída a partir de
+            evidências científicas que identificaram lacunas na preparação de parcerias para o
+            parto. Revisões de escopo apontaram pouca diversidade cultural, social e de gênero nas
+            tecnologias existentes, além de participação masculina limitada no desenvolvimento
+            dessas soluções. O aplicativo nasce para ampliar esse cuidado, valorizando a pluralidade
+            e incluindo qualquer pessoa que exerça relação de parentalidade com a pessoa gestante.
+          </p>
+          <p class="text-body1 text-grey-8 q-mt-sm">
+            O nome <strong>Parceria ao Lado</strong> remete ao termo latino <em>obstare</em> (“ficar
+            ao lado”), origem da palavra obstetra. Estar ao lado significa participar ativamente
+            durante toda a gestação, com ênfase no trabalho de parto e parto, em alinhamento com o
+            princípio da universalidade do SUS.
           </p>
         </q-card-section>
       </q-card>
@@ -40,7 +50,7 @@
         <q-card-section>
           <div class="text-h6 text-primary q-mb-md">
             <q-icon name="star" class="q-mr-sm" />
-            Funcionalidades
+            Conteúdos Educacionais
           </div>
           <q-list>
             <q-item v-for="feature in features" :key="feature.title" class="q-pa-sm">
@@ -96,11 +106,22 @@
             </q-item>
             <q-item>
               <q-item-section avatar>
+                <q-icon name="school" color="grey-6" />
+              </q-item-section>
+              <q-item-section>
+                <q-item-label caption>Pesquisadora</q-item-label>
+                <q-item-label
+                  >Enfermeira Obstetra Glória Cibele Bezerra Siqueira Frota</q-item-label
+                >
+              </q-item-section>
+            </q-item>
+            <q-item>
+              <q-item-section avatar>
                 <q-icon name="person" color="grey-6" />
               </q-item-section>
               <q-item-section>
                 <q-item-label caption>Desenvolvedor</q-item-label>
-                <q-item-label>levifrota</q-item-label>
+                <q-item-label>Levi Frota</q-item-label>
               </q-item-section>
             </q-item>
             <q-item clickable @click="openGitHub">
@@ -133,24 +154,25 @@ const currentYear = new Date().getFullYear()
 
 const features = ref([
   {
-    icon: 'search',
-    title: 'Busca de Parceiros',
-    description: 'Encontre parceiros ideais para seus projetos com facilidade.',
+    icon: 'gavel',
+    title: 'Direitos do Acompanhante',
+    description: 'Informações sobre os direitos da parceria durante o trabalho de parto e parto.',
   },
   {
-    icon: 'chat',
-    title: 'Comunicação Direta',
-    description: 'Converse diretamente com potenciais parceiros pelo app.',
+    icon: 'pregnant_woman',
+    title: 'Trabalho de Parto e Parto',
+    description: 'Orientações práticas para apoiar a pessoa gestante em cada etapa.',
   },
   {
-    icon: 'business_center',
-    title: 'Gestão de Projetos',
-    description: 'Organize e acompanhe suas parcerias em um só lugar.',
+    icon: 'accessibility_new',
+    title: 'Posições Verticalizadas e Alívio da Dor',
+    description: 'Incentivo a posições verticalizadas e métodos não farmacológicos de conforto.',
   },
   {
-    icon: 'verified_user',
-    title: 'Perfis Verificados',
-    description: 'Perfis autenticados para garantir a confiabilidade das conexões.',
+    icon: 'fact_check',
+    title: 'Cesárea, Violência Obstétrica e Cuidados com o Bebê',
+    description:
+      'Conteúdos sobre motivos reais de cesariana, violência obstétrica e cuidados neonatais.',
   },
 ])
 

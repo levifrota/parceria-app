@@ -1,10 +1,8 @@
 <template>
   <q-card class="contraction-timer">
     <q-card-section>
-      <div class="text-h6">Contador de Contrações</div>
-      <div class="text-subtitle2 text-grey-7">
-        Registre suas contrações para monitorar o trabalho de parto
-      </div>
+      <!-- <div class="text-h6">Contador de Contrações</div> -->
+      <div class="text-h6">Registre suas contrações para monitorar o trabalho de parto</div>
     </q-card-section>
 
     <q-card-section>

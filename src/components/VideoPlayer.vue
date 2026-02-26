@@ -1,5 +1,25 @@
 <template>
+  <!-- YouTube / Vimeo embed -->
+  <div v-if="isEmbedUrl" class="video-player video-player--embed">
+    <iframe
+      class="video-player__iframe"
+      :src="embedUrl"
+      frameborder="0"
+      allow="
+        accelerometer;
+        autoplay;
+        clipboard-write;
+        encrypted-media;
+        gyroscope;
+        picture-in-picture;
+      "
+      allowfullscreen
+    />
+  </div>
+
+  <!-- Native video player -->
   <div
+    v-else
     class="video-player"
     :class="{ 'controls-visible': controlsVisible || paused }"
     @mousemove="showControls"
@@ -137,8 +157,39 @@
 <script setup>
 import { ref, computed, onBeforeUnmount } from 'vue'
 
-defineProps({
+const props = defineProps({
   src: { type: String, required: true },
+})
+
+// ── Embed detection ────────────────────────────
+const youtubeRegex = /(?:youtube\.com\/(?:watch\?v=|embed\/|shorts\/)|youtu\.be\/)([\w-]{11})/
+const vimeoRegex = /vimeo\.com\/(?:video\/|)(\d+)/
+const jumpshareRegex = /jumpshare\.com\/(?:share|v)\/([A-Za-z0-9_-]+)/
+
+// Direct video file extensions that the native <video> element can handle
+const nativeVideoRegex = /\.(mp4|webm|ogg|mov|avi|mkv|m4v)(\?.*)?$/i
+
+const isEmbedUrl = computed(() => {
+  const s = props.src || ''
+  if (nativeVideoRegex.test(s)) return false
+  return youtubeRegex.test(s) || vimeoRegex.test(s) || jumpshareRegex.test(s)
+})
+
+const embedUrl = computed(() => {
+  const s = props.src || ''
+  const ytMatch = s.match(youtubeRegex)
+  if (ytMatch) {
+    return `https://www.youtube-nocookie.com/embed/${ytMatch[1]}?autoplay=0&rel=0`
+  }
+  const vmMatch = s.match(vimeoRegex)
+  if (vmMatch) {
+    return `https://player.vimeo.com/video/${vmMatch[1]}`
+  }
+  const jsMatch = s.match(jumpshareRegex)
+  if (jsMatch) {
+    return `https://jumpshare.com/embed/${jsMatch[1]}`
+  }
+  return s
 })
 
 const videoEl = ref(null)
@@ -289,6 +340,24 @@ onBeforeUnmount(() => {
 
 <style lang="scss" scoped>
 @use 'src/css/quasar.variables.scss' as *;
+
+// ── YouTube / Vimeo embed ──────────────────────
+.video-player--embed {
+  position: relative;
+  width: 100%;
+  aspect-ratio: 16 / 9;
+  border-radius: var(--radius);
+  overflow: hidden;
+  background: #000;
+
+  .video-player__iframe {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    border: none;
+  }
+}
 
 .video-player {
   position: relative;
