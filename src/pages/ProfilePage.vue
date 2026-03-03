@@ -36,7 +36,7 @@
           <!-- Nome do Pai/Mãe 1 -->
           <q-input
             v-model="form.parent1Name"
-            label="Nome do Pai/Mãe 1"
+            label="Nome do Pai/Mãe"
             outlined
             clearable
             :rules="[(val) => (val && val.length > 0) || 'Campo obrigatório']"
@@ -49,7 +49,7 @@
           <!-- Nome do Pai/Mãe 2 -->
           <q-input
             v-model="form.parent2Name"
-            label="Nome do Pai/Mãe 2"
+            label="Nome da Gestante"
             outlined
             clearable
             :rules="[(val) => (val && val.length > 0) || 'Campo obrigatório']"

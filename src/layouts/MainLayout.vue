@@ -72,6 +72,15 @@
             <q-item-label>Perfil da Família</q-item-label>
           </q-item-section>
         </q-item>
+
+        <q-item clickable to="/references">
+          <q-item-section avatar>
+            <q-icon name="menu_book" />
+          </q-item-section>
+          <q-item-section>
+            <q-item-label>Referências Bibliográficas</q-item-label>
+          </q-item-section>
+        </q-item>
       </q-list>
     </q-drawer>
 

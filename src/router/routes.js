@@ -10,6 +10,7 @@ const routes = [
       { path: 'content/:id', component: () => import('pages/ContentDetailPage.vue') },
       { path: 'profile', component: () => import('pages/ProfilePage.vue') },
       { path: 'about', component: () => import('pages/AboutPage.vue') },
+      { path: 'references', component: () => import('pages/ReferencesPage.vue') },
 
       // Rota temporária de admin
       {

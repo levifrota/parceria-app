@@ -83,8 +83,10 @@ const personalizedContent = computed(() => {
   return content.value.content
     .replace(/\{\{gestante\}\}/gi, parent2Name || 'você')
     .replace(/\{\{parceria\}\}/gi, parent1Name || 'sua parceria')
-    .replace(/\{\{bebê\}\}/gi, babyName || 'seu bebê')
+    .replace(/\{\{bebe\}\}/gi, babyName || 'seu bebê')
 })
+
+console.log('content:', content)
 
 const toggleFavorite = async () => {
   await pregnancyStore.toggleFavoriteAndSave(contentId.value)

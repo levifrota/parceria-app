@@ -6,16 +6,6 @@
     </q-card-section>
 
     <q-card-section>
-      <div v-if="shouldGoToHospital" class="alert-hospital q-mb-md">
-        <q-banner class="bg-red text-white" rounded>
-          <template v-slot:avatar>
-            <q-icon name="local_hospital" size="lg" />
-          </template>
-          <div class="text-h6">É hora de ir para a maternidade!</div>
-          <div>Suas contrações estão regulares e próximas.</div>
-        </q-banner>
-      </div>
-
       <div class="timer-display text-center q-mb-md">
         <div class="text-h3 text-primary">{{ formattedTime }}</div>
         <div class="text-caption text-grey-7">Tempo da contração atual</div>
@@ -100,7 +90,6 @@ let intervalId = null
 const contractions = computed(() => store.contractions)
 const recentContractions = computed(() => [...store.contractions].reverse().slice(0, 10))
 const contractionFrequency = computed(() => store.contractionFrequency)
-const shouldGoToHospital = computed(() => store.shouldGoToHospital)
 
 const formattedTime = computed(() => {
   const seconds = Math.floor(elapsedTime.value / 1000)
@@ -141,8 +130,14 @@ const formatDate = (timestamp) => {
 
 const formatDuration = (duration) => {
   if (!duration) return 'N/A'
-  const seconds = Math.floor(duration / 1000)
-  return `${seconds}s`
+  const secondsTotal = Math.floor(duration / 1000)
+  const mins = Math.floor(secondsTotal / 60)
+  const secs = secondsTotal % 60
+
+  if (mins > 0) {
+    return `${mins}min ${secs}s`
+  }
+  return `${secs}s`
 }
 </script>
 

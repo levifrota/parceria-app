@@ -38,26 +38,24 @@ export const usePregnancyStore = defineStore('pregnancy', () => {
 
   // Calcular frequência das contrações (últimas 10)
   const contractionFrequency = computed(() => {
-    const recent = contractions.value.slice(-10)
+    // Filtramos apenas as contrações completas (que têm duração) para garantir dados válidos
+    const completedContractions = contractions.value.filter((c) => c.duration !== null)
+    const recent = completedContractions.slice(-10)
+
     if (recent.length < 2) return null
 
     const intervals = []
     for (let i = 1; i < recent.length; i++) {
-      intervals.push(recent[i].timestamp - recent[i - 1].timestamp)
+      // O intervalo é a diferença entre o início da contração atual e o início da anterior
+      const diff = recent[i].timestamp - recent[i - 1].timestamp
+      intervals.push(diff)
     }
 
-    const avgInterval = intervals.reduce((a, b) => a + b, 0) / intervals.length
-    return Math.round(avgInterval / 60000) // em minutos
-  })
+    const avgIntervalMs = intervals.reduce((a, b) => a + b, 0) / intervals.length
+    const avgIntervalMin = avgIntervalMs / 60000
 
-  // Verificar se deve ir para maternidade
-  const shouldGoToHospital = computed(() => {
-    const recent = contractions.value.slice(-5)
-    if (recent.length < 5) return false
-
-    // Se contrações estão regulares a cada 5 minutos ou menos
-    const avgFrequency = contractionFrequency.value
-    return avgFrequency !== null && avgFrequency <= 5
+    // Retorna com 1 casa decimal para maior precisão em vez de arredondar bruscamente
+    return parseFloat(avgIntervalMin.toFixed(1))
   })
 
   // Favoritos
@@ -174,7 +172,6 @@ export const usePregnancyStore = defineStore('pregnancy', () => {
     endContraction,
     clearContractions,
     contractionFrequency,
-    shouldGoToHospital,
     toggleFavorite,
     isFavorite,
     updateFamilyProfile,
