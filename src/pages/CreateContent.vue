@@ -89,50 +89,20 @@
             :rules="[(val) => !!val || 'Campo obrigatório']"
           />
 
-          <!-- Ícone -->
-          <q-select
-            v-model="form.icon"
-            :options="iconOptions"
-            label="Ícone"
+          <!-- Imagem (imgBB) -->
+          <q-input
+            v-model="form.imageUrl"
+            label="URL da Imagem (imgBB)"
             outlined
-            emit-value
-            map-options
+            hint="Cole aqui o link direto da imagem do imgBB (ex: https://i.ibb.co/…/nome.png)"
           >
-            <template v-slot:option="scope">
-              <q-item v-bind="scope.itemProps">
-                <q-item-section avatar>
-                  <q-icon :name="scope.opt.value" />
-                </q-item-section>
-                <q-item-section>
-                  <q-item-label>{{ scope.opt.label }}</q-item-label>
-                </q-item-section>
-              </q-item>
+            <template v-slot:append>
+              <q-avatar v-if="form.imageUrl" rounded size="40px">
+                <img :src="form.imageUrl" style="object-fit: cover" />
+              </q-avatar>
+              <q-icon v-else name="image" color="grey" />
             </template>
-            <template v-slot:prepend>
-              <q-icon :name="form.icon" />
-            </template>
-          </q-select>
-
-          <!-- Cor -->
-          <q-select
-            v-model="form.color"
-            :options="colorOptions"
-            label="Cor"
-            outlined
-            emit-value
-            map-options
-          >
-            <template v-slot:option="scope">
-              <q-item v-bind="scope.itemProps">
-                <q-item-section avatar>
-                  <q-avatar :color="scope.opt.value" size="24px" />
-                </q-item-section>
-                <q-item-section>
-                  <q-item-label>{{ scope.opt.label }}</q-item-label>
-                </q-item-section>
-              </q-item>
-            </template>
-          </q-select>
+          </q-input>
 
           <!-- Ordem -->
           <q-input
@@ -192,7 +162,14 @@
             <q-list v-else separator>
               <q-item v-for="content in laborContents" :key="content.id" class="q-py-md">
                 <q-item-section avatar>
-                  <q-avatar :color="content.color" :icon="content.icon" text-color="white" />
+                  <q-avatar rounded>
+                    <img
+                      v-if="content.imageUrl"
+                      :src="content.imageUrl"
+                      style="object-fit: cover"
+                    />
+                    <q-icon v-else name="image" color="grey" />
+                  </q-avatar>
                 </q-item-section>
 
                 <q-item-section>
@@ -247,7 +224,14 @@
             <q-list v-else separator>
               <q-item v-for="content in postpartumContents" :key="content.id" class="q-py-md">
                 <q-item-section avatar>
-                  <q-avatar :color="content.color" :icon="content.icon" text-color="white" />
+                  <q-avatar rounded>
+                    <img
+                      v-if="content.imageUrl"
+                      :src="content.imageUrl"
+                      style="object-fit: cover"
+                    />
+                    <q-icon v-else name="image" color="grey" />
+                  </q-avatar>
                 </q-item-section>
 
                 <q-item-section>
@@ -448,8 +432,7 @@ const form = ref({
   description: '',
   content: '',
   url: '',
-  icon: 'article',
-  color: 'primary',
+  imageUrl: '',
   order: 1,
   featured: false,
 })
@@ -479,37 +462,6 @@ const categoryOptions = [
   { label: 'Pós-parto', value: 'postpartum' },
 ]
 
-const iconOptions = [
-  { label: 'Artigo', value: 'article' },
-  { label: 'Aviso', value: 'warning' },
-  { label: 'Favorito', value: 'favorite' },
-  { label: 'Info', value: 'info' },
-  { label: 'Saúde', value: 'healing' },
-  { label: 'Bebê', value: 'child_care' },
-  { label: 'Médico', value: 'medical_services' },
-  { label: 'Exercício', value: 'fitness_center' },
-  { label: 'Alimentação', value: 'restaurant' },
-  { label: 'Sono', value: 'bedtime' },
-  { label: 'Psicologia', value: 'psychology' },
-  { label: 'Checklist', value: 'checklist' },
-  { label: 'Livro', value: 'menu_book' },
-  { label: 'Vídeo', value: 'play_circle' },
-  { label: 'Áudio', value: 'headphones' },
-]
-
-const colorOptions = [
-  { label: 'Roxo (Primary)', value: 'primary' },
-  { label: 'Azul', value: 'blue' },
-  { label: 'Verde', value: 'green' },
-  { label: 'Laranja', value: 'orange' },
-  { label: 'Rosa', value: 'pink' },
-  { label: 'Vermelho', value: 'red' },
-  { label: 'Roxo', value: 'purple' },
-  { label: 'Ciano', value: 'cyan' },
-  { label: 'Âmbar', value: 'amber' },
-  { label: 'Teal', value: 'teal' },
-]
-
 const laborContents = computed(() => {
   return [...contentStore.contents.labor].sort((a, b) => a.order - b.order)
 })
@@ -527,8 +479,7 @@ const saveContent = async () => {
       category: form.value.category,
       title: form.value.title,
       description: form.value.description,
-      icon: form.value.icon,
-      color: form.value.color,
+      imageUrl: form.value.imageUrl,
       order: form.value.order,
       featured: form.value.featured,
     }
@@ -584,8 +535,7 @@ const editContent = (content) => {
     description: content.description,
     content: content.content || '',
     url: content.url || '',
-    icon: content.icon,
-    color: content.color,
+    imageUrl: content.imageUrl || '',
     order: content.order,
     featured: content.featured || false,
   }
@@ -607,8 +557,7 @@ const resetForm = () => {
     description: '',
     content: '',
     url: '',
-    icon: 'article',
-    color: 'primary',
+    imageUrl: '',
     order: 1,
     featured: false,
   }

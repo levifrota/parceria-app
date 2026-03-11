@@ -8,7 +8,6 @@
     <div v-else-if="content" class="content-detail">
       <div class="page-header q-mb-lg">
         <q-btn flat round dense icon="arrow_back" @click="$router.back()" />
-        <h1 class="text-h5 text-weight-bold q-ml-md">{{ content.title }}</h1>
         <q-space />
         <q-btn
           flat
@@ -23,7 +22,12 @@
       <q-card>
         <q-card-section>
           <div class="row items-center q-mb-md">
-            <q-avatar :color="content.color" text-color="white" :icon="content.icon" size="72px" />
+            <q-img
+              :src="content.imageUrl"
+              style="width: 100px; height: 100px; border-radius: 10px; flex-shrink: 0"
+              spinner-color="grey-4"
+              spinner-size="24px"
+            />
             <div class="col q-ml-md">
               <div class="text-h6">{{ content.title }}</div>
               <div class="text-caption text-grey-7">{{ content.description }}</div>
@@ -108,5 +112,12 @@ onMounted(async () => {
 .content-detail {
   max-width: 800px;
   margin: 0 auto;
+}
+
+:deep(.text-body1 img) {
+  max-width: 100% !important;
+  height: auto;
+  border-radius: 8px;
+  margin: 16px 0;
 }
 </style>

@@ -1,7 +1,7 @@
 <template>
   <q-page padding>
     <!-- Adicionar no topo da página, temporário -->
-    <div class="" v-if="FALSE">
+    <div class="" v-if="true">
       <q-btn
         flat
         dense
@@ -57,11 +57,12 @@
 
       <div class="col-12 col-md-6">
         <q-card class="category-card" @click="navigateTo('/contractions')">
-          <div class="contractions-bg flex column justify-end q-pa-md">
-            <q-icon name="timer" size="48px" color="white" class="q-mb-xs" />
-            <div class="text-h5 text-white text-weight-bold">Contrações</div>
-            <div class="text-caption text-white">Contador de contrações</div>
-          </div>
+          <q-img :src="timerUrl" :ratio="16 / 9" spinner-color="white" spinner-size="82px">
+            <div class="absolute-full card-overlay flex column justify-end q-pa-md">
+              <div class="text-h5 text-white text-weight-bold">Contrações</div>
+              <div class="text-caption text-white">Contador de contrações</div>
+            </div>
+          </q-img>
         </q-card>
       </div>
     </div>
@@ -102,8 +103,9 @@ const greeting = computed(() => {
   return 'Parceria ao Lado'
 })
 
-const laborUrl = 'https://i.ibb.co/LXjc7T81/img-parto.png'
-const postpartumUrl = 'https://i.ibb.co/rfsQY4w6/img-post-parto.png'
+const laborUrl = 'https://i.ibb.co/7xrsdV65/Parto.png'
+const postpartumUrl = 'https://i.ibb.co/hJL9zCXd/P-s-parto.png'
+const timerUrl = 'https://i.ibb.co/TxmM77Jk/Timer.png'
 
 const favoriteContents = computed(() => {
   if (!pregnancyStore.favoriteContent || pregnancyStore.favoriteContent.length === 0) {

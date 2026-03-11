@@ -40,7 +40,9 @@ import ContentCard from 'src/components/ContentCard.vue'
 
 const contentStore = useContentStore()
 
-const postpartumContents = computed(() => contentStore.contents.postpartum)
+const postpartumContents = computed(() =>
+  [...contentStore.contents.postpartum].sort((a, b) => (a.order ?? 0) - (b.order ?? 0)),
+)
 const loading = computed(() => contentStore.loading)
 const error = computed(() => contentStore.error)
 

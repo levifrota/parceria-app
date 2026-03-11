@@ -1,7 +1,18 @@
 <template>
   <q-card class="content-card" @click="openContent">
-    <q-card-section class="row items-center">
-      <q-avatar :color="content.color" text-color="white" :icon="content.icon" size="56px" />
+    <q-card-section class="row items-center no-wrap">
+      <q-img
+        :src="content.imageUrl"
+        style="width: 80px; height: 80px; border-radius: 10px; flex-shrink: 0"
+        spinner-color="grey-4"
+        spinner-size="24px"
+      >
+        <template v-slot:error>
+          <div class="absolute-full flex flex-center bg-grey-3">
+            <q-icon name="image" color="grey-6" size="32px" />
+          </div>
+        </template>
+      </q-img>
 
       <div class="col q-ml-md title">
         <div class="text-h6">{{ content.title }}</div>

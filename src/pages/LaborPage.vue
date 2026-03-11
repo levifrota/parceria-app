@@ -40,7 +40,9 @@ import ContentCard from 'src/components/ContentCard.vue'
 
 const contentStore = useContentStore()
 
-const laborContents = computed(() => contentStore.contents.labor)
+const laborContents = computed(() =>
+  [...contentStore.contents.labor].sort((a, b) => (a.order ?? 0) - (b.order ?? 0)),
+)
 const loading = computed(() => contentStore.loading)
 const error = computed(() => contentStore.error)
 
