@@ -13,8 +13,7 @@
     <q-drawer v-model="leftDrawerOpen" show-if-above bordered>
       <q-list>
         <q-item-label header class="text-weight-bold">
-          {{ greetingMessage }}
-          <span v-if="familyProfile.parent1Name">, {{ familyProfile.parent1Name }}!</span>
+          {{ greeting }}
         </q-item-label>
 
         <q-item clickable to="/" exact>
@@ -115,8 +114,13 @@ const store = usePregnancyStore()
 
 const leftDrawerOpen = ref(false)
 
-const familyProfile = computed(() => store.familyProfile)
-const greetingMessage = computed(() => store.greetingMessage)
+const greeting = computed(() => {
+  const profile = store.familyProfile
+  if (profile.parent1Name) {
+    return `Olá, ${store.greetingMessage}!`
+  }
+  return 'Parceria ao Lado'
+})
 
 const toggleLeftDrawer = () => {
   leftDrawerOpen.value = !leftDrawerOpen.value
