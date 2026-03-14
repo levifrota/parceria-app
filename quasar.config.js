@@ -99,6 +99,11 @@ export default defineConfig((/* ctx */) => {
     // https://v2.quasar.dev/options/animations
     animations: [],
 
+    // https://v2.quasar.dev/quasar-cli-vite/quasar-config-file#bin
+    bin: {
+      linuxAndroidStudio: '/snap/android-studio/209/bin/studio.sh',
+    },
+
     // https://v2.quasar.dev/quasar-cli-vite/quasar-config-file#sourcefiles
     // sourceFiles: {
     //   rootComponent: 'src/App.vue',
