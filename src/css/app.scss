@@ -974,6 +974,13 @@ body {
   }
 }
 
+.apoio {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: space-around;
+}
+
 // ============================================
 // ACCORDION (shadcn-vue Accordion exact)
 // Reference: shadcn-vue/accordion.vue

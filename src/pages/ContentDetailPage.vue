@@ -85,9 +85,9 @@ const personalizedContent = computed(() => {
   if (!content.value?.content) return ''
   const { babyName, parent1Name, parent2Name } = pregnancyStore.familyProfile
   return content.value.content
-    .replace(/\{\{gestante\}\}/gi, parent2Name || 'você')
-    .replace(/\{\{parceria\}\}/gi, parent1Name || 'sua parceria')
-    .replace(/\{\{bebe\}\}/gi, babyName || 'seu bebê')
+    .replace(/\{\{parceria\}\}/gi, parent2Name || 'você')
+    .replace(/\{\{gestante\}\}/gi, parent1Name || 'sua parceria')
+    .replace(/\{\{bebe\}\}/gi, babyName || 'bebê')
 })
 
 console.log('content:', content)

@@ -110,9 +110,16 @@
               </q-item-section>
               <q-item-section>
                 <q-item-label caption>Pesquisadora</q-item-label>
-                <q-item-label
-                  >Enfermeira Obstetra Glória Cibele Bezerra Siqueira Frota</q-item-label
-                >
+                <q-item-label>Enfermeira Glória Cibele Bezerra Siqueira Frota</q-item-label>
+              </q-item-section>
+            </q-item>
+            <q-item>
+              <q-item-section avatar>
+                <q-icon name="school" color="grey-6" />
+              </q-item-section>
+              <q-item-section>
+                <q-item-label caption>Pesquisadora</q-item-label>
+                <q-item-label>Professora Doutora Maria Adelane Monteiro da Silva</q-item-label>
               </q-item-section>
             </q-item>
             <q-item>
@@ -122,6 +129,22 @@
               <q-item-section>
                 <q-item-label caption>Desenvolvedor</q-item-label>
                 <q-item-label>Levi Frota</q-item-label>
+              </q-item-section>
+            </q-item>
+            <q-item>
+              <q-item-section avatar>
+                <q-icon name="library_books" color="grey-6" />
+              </q-item-section>
+              <q-item-section>
+                <q-item-label caption>Apoio</q-item-label>
+                <q-item-section class="apoio">
+                  <img style="max-width: 15vw" src="../assets/PREOUVA.png" alt="PREOUVA" />
+                  <img
+                    style="max-width: 30vw"
+                    src="../assets/brasao-uva-oficial-horizontal.png"
+                    alt="UVA"
+                  />
+                </q-item-section>
               </q-item-section>
             </q-item>
             <q-item clickable @click="openGitHub">
