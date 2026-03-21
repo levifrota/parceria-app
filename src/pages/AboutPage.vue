@@ -11,7 +11,7 @@
       <!-- Hero Section -->
       <div class="text-center q-py-xl flex column items-center">
         <q-avatar size="100px" class="q-mb-md justify-center">
-          <q-icon name="handshake" size="60px" color="primary" />
+          <q-icon name="img:/icons/android/play_store_512.png" size="100px" color="primary" />
         </q-avatar>
         <h4 class="text-h4 text-weight-bold text-primary q-ma-none">Parceria ao Lado</h4>
         <p class="text-subtitle1 text-grey-7 q-mt-sm">
@@ -31,16 +31,13 @@
           <p class="text-body1 text-grey-8">
             O <strong>Parceria ao Lado</strong> é uma tecnologia educacional construída a partir de
             evidências científicas que identificaram lacunas na preparação de parcerias para o
-            parto. Revisões de escopo apontaram pouca diversidade cultural, social e de gênero nas
-            tecnologias existentes, além de participação masculina limitada no desenvolvimento
-            dessas soluções. O aplicativo nasce para ampliar esse cuidado, valorizando a pluralidade
-            e incluindo qualquer pessoa que exerça relação de parentalidade com a pessoa gestante.
+            parto. O aplicativo nasce para ampliar esse cuidado, valorizando a pluralidade e
+            incluindo qualquer pessoa que exerça relação de parentalidade com a pessoa gestante.
           </p>
           <p class="text-body1 text-grey-8 q-mt-sm">
             O nome <strong>Parceria ao Lado</strong> remete ao termo latino <em>obstare</em> (“ficar
-            ao lado”), origem da palavra obstetra. Estar ao lado significa participar ativamente
-            durante toda a gestação, com ênfase no trabalho de parto e parto, em alinhamento com o
-            princípio da universalidade do SUS.
+            ao lado”), origem da palavra "obstetra". Estar ao lado significa participar ativamente
+            durante toda a gestação, com ênfase no trabalho de parto e parto.
           </p>
         </q-card-section>
       </q-card>
@@ -128,7 +125,15 @@
               </q-item-section>
               <q-item-section>
                 <q-item-label caption>Desenvolvedor</q-item-label>
-                <q-item-label>Levi Frota</q-item-label>
+                <q-item-label
+                  ><a
+                    class="text-primary"
+                    href="https://www.linkedin.com/in/levifrota27/"
+                    target="_blank"
+                    style="text-decoration: none"
+                    >Levi Frota</a
+                  ></q-item-label
+                >
               </q-item-section>
             </q-item>
             <q-item>
@@ -215,5 +220,27 @@ function openGitHub() {
 .about-page {
   background-color: #f5f5f5;
   min-height: 100vh;
+}
+
+:deep(*) {
+  --q-transition-duration: 0ms !important;
+}
+
+:deep(.q-focus-helper) {
+  display: none !important;
+}
+
+:deep(.q-hoverable:hover > .q-focus-helper) {
+  display: none !important;
+}
+
+:deep(a:hover),
+:deep(.q-btn:hover),
+:deep(.q-card:hover),
+:deep(.q-item:hover),
+:deep(.q-chip:hover) {
+  background: transparent !important;
+  color: inherit !important;
+  box-shadow: none !important;
 }
 </style>

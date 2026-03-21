@@ -90,8 +90,6 @@ const personalizedContent = computed(() => {
     .replace(/\{\{bebe\}\}/gi, babyName || 'bebê')
 })
 
-console.log('content:', content)
-
 const toggleFavorite = async () => {
   await pregnancyStore.toggleFavoriteAndSave(contentId.value)
 }
