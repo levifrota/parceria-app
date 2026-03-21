@@ -1,7 +1,7 @@
 <template>
   <q-page padding>
     <!-- Adicionar no topo da página, temporário -->
-    <div class="" v-if="true">
+    <div class="" v-if="false">
       <q-btn
         flat
         dense
